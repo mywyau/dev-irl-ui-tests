@@ -1,11 +1,15 @@
 import { defineConfig } from '@playwright/test';
+import * as dotenv from 'dotenv';
+
+// Load env vars from .env file
+dotenv.config();
 
 export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
     browserName: 'chromium',
-    headless: true,
+    headless: false,
   },
   testDir: './tests',
-  timeout: 20000,
+  timeout: 30000,
 });

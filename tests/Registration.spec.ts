@@ -1,11 +1,14 @@
-import { expect, test, request } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import * as dotenv from "dotenv";
 
 dotenv.config();
 
 // Gmail test account credentials (used only for e2e testing)
-const testEmail = process.env.DEV_EMAIL;
-const testPassword = process.env.DEV_PASSWORD;
+const testUserEmail1 = process.env.TEST_USER_DEV_EMAIL;
+const testUserPassword1 = process.env.TEST_USER_DEV_PASSWORD;
+
+const testUserEmail2 = process.env.TEST_USER_CLIENT_EMAIL;
+const testUserPassword2 = process.env.TEST_USER_CLIENT_PASSWORD;
 
 // to pause a step - await page.pause();
 
@@ -24,7 +27,7 @@ test("forces user type selection if not set", async ({ page }) => {
   await expect(heading).toHaveText("Welcome to Dev Irl");
 });
 
-test("Dev user logs in with Google and sees Dev-specific nav", async ({
+test("Dev user logs in with Google, is able to complete registration and then delete the profile", async ({
   page,
 }) => {
   // 🏠 Navigate to homepage
@@ -52,10 +55,10 @@ test("Dev user logs in with Google and sees Dev-specific nav", async ({
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testEmail);
+  await page.getByLabel("Email or phone").fill(testUserEmail1);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testPassword);
+  await page.getByLabel("Enter your password").fill(testUserPassword1);
   await page.getByRole("button", { name: "Next" }).click();
 
   // ✅ Expect the UI to reflect Dev login
@@ -74,6 +77,63 @@ test("Dev user logs in with Google and sees Dev-specific nav", async ({
   await expect(devDashboardLink).toBeVisible();
   await expect(devProfileLink).toBeVisible();
 
+  await devProfileLink.click();
+  await page.getByRole("button", { name: "Delete user profile" }).click();
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});
+
+
+test("Client user logs in with Google, is able to complete registration and then delete the profile", async ({
+  page,
+}) => {
+  // 🏠 Navigate to homepage
+  await page.goto("/");
+
+  // 🧭 Top-level nav elements
+  const loginLink = page.getByRole("link", { name: "Login" });
+  const logoutLink = page.getByRole("link", { name: "Logout" });
+
+  // 👤 Dev-specific navigation links
+  const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
+  const clientDashboardLink = page.getByRole("link", {name: "Client Quests Dashboard"});
+  const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
+
+  // 👉 Auth0 / Google login flow
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  const googleButton = page.getByRole("button", {
+    name: /continue with google/i,
+  });
+  await expect(googleButton).toBeVisible();
+  await googleButton.click();
+
+  // 📧 Gmail login
+  await page.getByLabel("Email or phone").fill(testUserEmail2);
+  await page.getByRole("button", { name: "Next" }).click();
+
+  await page.getByLabel("Enter your password").fill(testUserPassword2);
+  await page.getByRole("button", { name: "Next" }).click();
+
+  // ✅ Expect the UI to reflect Dev login
+  await expect(logoutLink).toBeVisible();
+
+  // 1. Click the dropdown trigger by role or fallback to text-based locator
+  await page.locator('button[role="combobox"]').click();
+
+  // 2. Wait for dropdown content to appear and click "Dev"
+  await page.locator('[data-state="open"] >> text=Client').click();
+
+  // 3. Click the continue button
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(clientDashboardLink).toBeVisible();
+  await expect(clientProfileLink).toBeVisible();
+
+  await clientProfileLink.click();
+  await page.getByRole("button", { name: "Delete user profile" }).click();
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
 });

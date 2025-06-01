@@ -11,5 +11,5 @@ export default defineConfig({
     headless: false,
   },
   testDir: './tests',
-  timeout: 30000,
+  timeout: 10000,
 });

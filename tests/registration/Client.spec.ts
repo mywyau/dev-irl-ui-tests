@@ -8,7 +8,7 @@ const testUserPassword2 = process.env.TEST_USER_CLIENT_PASSWORD;
 
 // to pause a step - await page.pause();
 
-test("Client user logs in with Google, is able to create multiple quests", async ({
+test("Client user logs in with Google, is able to complete registration", async ({
   page,
 }) => {
   // 🏠 Navigate to homepage
@@ -23,13 +23,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
   const clientQuestDashboardLink = page.getByRole("link", {
     name: "Client Quests Dashboard",
   });
-  const createAQuestsLink = page.getByRole("link", { name: "Create a quest" });
-  const viewMyQuestsLink = page.getByRole("link", { name: "View my quests" });
   const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
-  const createQuestLink = page.getByRole("button", { name: "Create Quest" });
-  const viewAllPublicQuestsLink = page.getByRole("link", {
-    name: "View all quests",
-  });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();
@@ -48,34 +42,38 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await page.getByLabel("Enter your password").fill(testUserPassword2);
   await page.getByRole("button", { name: "Next" }).click();
 
-  // ✅ Expect the UI to reflect Client login
+  // ✅ Expect the UI to reflect Dev login
   await expect(logoutLink).toBeVisible();
+
+  // 1) Open the dropdown:
+  const trigger = page.locator('[data-testid="role-select-trigger"]');
+  // const trigger = page.locator("#role-select");
+  await expect(trigger).toBeVisible();
+  await page.waitForTimeout(500);
+  await trigger.click();
+  // await trigger.click();
+
+  // 2) Wait for the dropdown panel to show up
+  const content = page.locator(
+    '[data-testid="role-select-content"][data-state="open"]'
+  );
+  await expect(content).toBeVisible();
+
+  // 3) Click “Client”
+  const clientOption = page.locator('[data-testid="role-select-item-Client"]');
+  await expect(clientOption).toBeVisible();
+  await clientOption.click();
+
+  // 4) Finally click the “Continue” button
+  const continueBtn = page.getByRole("button", { name: "Continue" });
+  await expect(continueBtn).toBeEnabled();
+  await continueBtn.click();
+
   await expect(viewAllQuestsLink).toBeVisible();
   await expect(clientQuestDashboardLink).toBeVisible();
   await expect(clientProfileLink).toBeVisible();
 
-  await clientQuestDashboardLink.click();
-  await createAQuestsLink.click();
-
-  await page.waitForTimeout(250);
-
-  await page.fill("#quest-title", "Quest 1");
-  await page.fill("#quest-description", "Some description for quest 1");
-  await createQuestLink.click();
-
-  // wait 500 ms before doing the next one
-  await page.waitForTimeout(500);
-
-  await page.fill("#quest-title", "Quest 2");
-  await page.fill("#quest-description", "Some description for quest 2");
-  await createQuestLink.click();
-
-  // another 500 ms pause
-  await page.waitForTimeout(500);
-
-  await page.fill("#quest-title", "Quest 3");
-  await page.fill("#quest-description", "Some description for quest 3");
-  await createQuestLink.click();
-
-  await viewAllPublicQuestsLink.click();
+  await clientProfileLink.click();
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
 });

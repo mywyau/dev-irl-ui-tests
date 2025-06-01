@@ -46,11 +46,11 @@ test("Client user logs in with Google, is able to complete registration", async 
   await expect(logoutLink).toBeVisible();
 
   // 1. Click the dropdown trigger by role or fallback to text-based locator
-  await page.locator('button[role="combobox"]').click();
+  // await page.locator('button[role="combobox"]').click();
+  const selectTrigger = page.locator('button:has-text("Select your role...")').click();
 
   // 2. Wait for dropdown content to appear and click "Dev"
   await page.locator('[data-state="open"] >> text=Client').click();
-
   // 3. Click the continue button
   await page.getByRole("button", { name: "Continue" }).click();
 
@@ -115,5 +115,4 @@ test("Client user logs in with Google, is able to create a quest", async ({
   await page.fill("#quest-description", "Some description for quest 1");
   await createQuestLink.click();
   await viewAllPublicQuestsLink.click();
-  await page.pause();
 });

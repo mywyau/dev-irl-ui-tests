@@ -53,6 +53,7 @@ test("Delete dev profile", async ({
   await expect(devProfileLink).toBeVisible();
 
   await devProfileLink.click();
+  await page.waitForTimeout(2000);
   await page.getByRole("button", { name: "Delete user profile" }).click();
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
@@ -98,6 +99,7 @@ test("Login and delete the test client user profile", async ({
   await expect(clientProfileLink).toBeVisible();
 
   await clientProfileLink.click();
+  await page.waitForTimeout(2000);
   await page.getByRole("button", { name: "Delete user profile" }).click();
   await logoutLink.click();
   await expect(loginLink).toBeVisible();

@@ -45,6 +45,8 @@ test("Client user logs in with Google, is able to complete registration", async 
   // ✅ Expect the UI to reflect Dev login
   await expect(logoutLink).toBeVisible();
 
+  await page.waitForTimeout(2000);
+
   // 1) Open the dropdown:
   const trigger = page.locator('[data-testid="role-select-trigger"]');
   // const trigger = page.locator("#role-select");

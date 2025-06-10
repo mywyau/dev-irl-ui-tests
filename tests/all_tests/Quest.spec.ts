@@ -1,37 +1,39 @@
+// These tests bleed into each other i.e. they sequentially set next test up with data creation, edits etc.
+
+// Note to self do not let tests/app/data state bleed from one spec to another. As a necessary evil keep within the same spec.
+
 import { expect, test } from "@playwright/test";
-import * as dotenv from "dotenv";
 
-dotenv.config();
+import {
+  testClientUserEmail2,
+  testClientUserPassword2,
+  testDevUserEmail1,
+  testDevUserPassword1,
+} from "@/configuration/Appconfig";
 
-const testUserEmail1 = process.env.TEST_USER_DEV_EMAIL;
-const testUserPassword1 = process.env.TEST_USER_DEV_PASSWORD;
-
-const testUserEmail2 = process.env.TEST_USER_CLIENT_EMAIL;
-const testUserPassword2 = process.env.TEST_USER_CLIENT_PASSWORD;
+import { clientQuestElements } from "@/pages/ClientQuestPage";
+import { devQuestElements } from "@/pages/DevQuestPage";
 
 // to pause a step - await page.pause();
 
 test("Client user logs in with Google, is able to create multiple quests", async ({
   page,
 }) => {
+  const {
+    loginLink,
+    logoutLink,
+    clientQuestDashboardLink,
+    clientProfileLink,
+    createAQuestLink,
+    createQuestButton,
+    viewAllQuestsLink,
+    viewAllPublicQuestsLink,
+  } = clientQuestElements(page);
+
+  const h1 = page.locator("h1");
+
   // 🏠 Navigate to homepage
   await page.goto("/");
-
-  // 🧭 Top-level nav elements
-  const loginLink = page.getByRole("link", { name: "Login" });
-  const logoutLink = page.getByRole("link", { name: "Logout" });
-
-  // 👤 Dev-specific navigation links
-  const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
-  const clientQuestDashboardLink = page.getByRole("link", {
-    name: "Client Quests Dashboard",
-  });
-  const viewMyQuestsLink = page.getByRole("link", { name: "View my quests" });
-  const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
-
-  const viewAllPublicQuestsLink = page.getByRole("link", {
-    name: "View all quests",
-  });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();
@@ -44,10 +46,10 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testUserEmail2);
+  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testUserPassword2);
+  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
   await page.getByRole("button", { name: "Next" }).click();
 
   // ✅ Expect the UI to reflect Client login
@@ -57,87 +59,148 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await expect(clientProfileLink).toBeVisible();
 
   await clientQuestDashboardLink.click();
-
-  
+  await createAQuestLink.click();
 
   await page.waitForTimeout(250);
-
+  await expect(h1).toHaveText("Create a New Quest");
   await page.fill("#quest-title", "Quest 1");
   await page.fill("#quest-description", "Some description for quest 1");
+  await createQuestButton.click();
 
-  // wait 500 ms before doing the next one
   await page.waitForTimeout(500);
 
   await page.fill("#quest-title", "Quest 2");
   await page.fill("#quest-description", "Some description for quest 2");
+  await createQuestButton.click();
 
-  // another 500 ms pause
   await page.waitForTimeout(500);
 
   await page.fill("#quest-title", "Quest 3");
   await page.fill("#quest-description", "Some description for quest 3");
+  await createQuestButton.click();
 
   await viewAllPublicQuestsLink.click();
+  await expect(h1).toHaveText("All Available Open Quests");
   await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});
+
+test("Client can edit a previously created quest", async ({ page }) => {
+  const {
+    loginLink,
+    logoutLink,
+    clientProfileLink,
+    clientQuestDashboardLink,
+    editQuestButton,
+    updateQuestButton,
+    viewMyQuestsLink,
+    viewQuestLink,
+    viewAllQuestsLink,
+  } = clientQuestElements(page);
+
+  const h1 = page.locator("h1");
+  const h2 = page.locator("h2");
+
+  const googleButton = page.getByRole("button", {
+    name: /continue with google/i,
+  });
+
+  // 🏠 Navigate to homepage
+  await page.goto("/");
+
+  // 👉 Auth0 / Google login flow
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await expect(googleButton).toBeVisible();
+  await googleButton.click();
+
+  // 📧 Gmail login
+  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
+  await page.getByRole("button", { name: "Next" }).click();
+
+  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
+  await page.getByRole("button", { name: "Next" }).click();
+
+  // 1. Expect the UI to reflect Client login
+  await expect(logoutLink).toBeVisible();
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(clientProfileLink).toBeVisible();
+  await expect(clientProfileLink).toBeVisible();
+
+  await clientQuestDashboardLink.click();
+  await expect(h1).toHaveText("Client Quest Dashboard");
+  await viewMyQuestsLink.click();
+  await expect(h1).toHaveText("My Quests");
+  await viewQuestLink.first().click();
+  await expect(h1).toHaveText("Quest Details");
+  await expect(h2).toHaveText("Quest 3");
+  await page.waitForTimeout(500);
+
+  await editQuestButton.click();
+
+  await page.waitForTimeout(250);
+  await expect(h1).toHaveText("Edit Quest");
+  await page.fill("#quest-title", "Updated Quest 3");
+  await page.fill("#quest-description", "Some updated description for quest 3");
+  await updateQuestButton.click();
+
+  await clientQuestDashboardLink.click();
+  await expect(h1).toHaveText("Client Quest Dashboard");
+  await viewMyQuestsLink.click();
+  await expect(h1).toHaveText("My Quests");
+  await viewQuestLink.first().click();
+  await expect(h1).toHaveText("Quest Details");
+  await expect(h2).toHaveText("Updated Quest 3");
+
+  // TODO: Fix;
+  await logoutLink.click();
+  await logoutLink.click();
+  await page.waitForTimeout(2000);
   await expect(loginLink).toBeVisible();
 });
 
 test("Dev user logs in with Google, is able to accept some quests and move it from NotStarted -> InProgress -> Review", async ({
   page,
 }) => {
-  // 🏠 Navigate to homepage
-  await page.goto("/");
-
-  // 🧭 Top-level nav elements
-  const loginLink = page.getByRole("link", { name: "Login" });
-  const logoutLink = page.getByRole("link", { name: "Logout" });
-
-  // 👤 Dev-specific navigation links
-  const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
-  const devQuestDashboardLink = page.getByRole("link", {
-    name: "Dev Quests Dashboard",
-  });
-  const devProfileLink = page.getByRole("link", { name: "Client Profile" });
-
-  const viewQuestLink = page.getByRole("link", { name: "View Quest →" });
-
-  const acceptQuestButton = page.getByRole("button", { name: "Accept Quest" });
-  const viewDetailsButton = page.getByRole("button", { name: "View Details" });
-
-  const notStartedButton = page.getByRole("button", { name: "Not Started" });
-  const inProgressButton = page.getByRole("button", { name: "In Progress" });
-  const reviewButton = page.getByRole("button", { name: "Review" });
-
-  const moveToInProgressButton = page.getByRole("button", {
-    name: "Move quest to In Progress",
-  });
-  const moveToReviewButton = page.getByRole("button", {
-    name: "Move quest to in Review",
-  });
-  const moveToCompletedButton = page.getByRole("button", {
-    name: "Move quest to Completed",
-  });
-  const moveToFailedButton = page.getByRole("button", {
-    name: "Move quest to Failed",
-  });
+  const {
+    loginLink,
+    logoutLink,
+    devProfileLink,
+    devQuestDashboardLink,
+    viewDetailsButton,
+    viewQuestLink,
+    viewAllQuestsLink,
+    acceptQuestButton,
+    notStartedButton,
+    inProgressButton,
+    reviewButton,
+    moveToInProgressButton,
+    moveToReviewButton,
+  } = devQuestElements(page);
 
   const h1 = page.locator("h1");
+  const h2 = page.locator("h2");
+
+  const googleButton = page.getByRole("button", {
+    name: /Continue with google/i,
+  });
+
+  // 🏠 Navigate to homepage
+  await page.goto("/");
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  const googleButton = page.getByRole("button", {
-    name: /continue with google/i,
-  });
   await expect(googleButton).toBeVisible();
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testUserEmail1);
+  await page.getByLabel("Email or phone").fill(testDevUserEmail1);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testUserPassword1);
+  await page.getByLabel("Enter your password").fill(testDevUserPassword1);
   await page.getByRole("button", { name: "Next" }).click();
 
   // 1. Expect the UI to reflect Client login
@@ -149,29 +212,183 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   // 2. Accept a quest
   await viewAllQuestsLink.click();
   await expect(h1).toHaveText("All Available Open Quests");
-  await viewQuestLink.click();
+  await viewQuestLink.first().click();
   await expect(h1).toHaveText("Quest Details");
   await acceptQuestButton.click();
   await devQuestDashboardLink.click();
   await expect(h1).toHaveText("Dev Quest Dashboard");
   await notStartedButton.click();
   await expect(h1).toHaveText("Not Started");
+  await expect(h2).toHaveText("Updated Quest 3");
   await viewDetailsButton.click();
   await expect(h1).toHaveText("Quest Details");
   await page.goBack();
   await moveToInProgressButton.click();
   await devQuestDashboardLink.click();
+  await expect(h1).toHaveText("Dev Quest Dashboard");
   await inProgressButton.click();
   await expect(h1).toHaveText("In Progress");
+  await expect(h2).toHaveText("Updated Quest 3");
   await viewDetailsButton.click();
-  await page.goBack();
   await expect(h1).toHaveText("Quest Details");
+  await page.goBack();
   await moveToReviewButton.click();
   await devQuestDashboardLink.click();
+  await expect(h1).toHaveText("Dev Quest Dashboard");
   await reviewButton.click();
   await expect(h1).toHaveText("Review");
+  await expect(h2).toHaveText("Updated Quest 3");
   await viewDetailsButton.click();
   await page.goBack();
+
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});
+
+test("Clinet user logs in with Google, is able to move a quest in Review to Completed", async ({
+  page,
+}) => {
+  const {
+    loginLink,
+    logoutLink,
+    viewDetailsLink,
+    viewQuestLink,
+    viewAllQuestsLink,
+    clientProfileLink,
+    clientQuestDashboardLink,
+    clientReviewButton,
+    clientCompletedButton,
+    moveToCompletedButton,
+    moveToFailedButton,
+  } = clientQuestElements(page);
+
+  const h1 = page.locator("h1");
+  const h2 = page.locator("h2");
+
+  const googleButton = page.getByRole("button", {
+    name: /Continue with google/i,
+  });
+
+  // Client flow to move quest to completed
+  // 🏠 Navigate to homepage
+  await page.goto("/");
+
+  // 👉 Auth0 / Google login flow
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await expect(googleButton).toBeVisible();
+  await googleButton.click();
+
+  // 📧 Gmail login
+  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
+  await page.getByRole("button", { name: "Next" }).click();
+
+  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
+  await page.getByRole("button", { name: "Next" }).click();
+
+  // 1. Expect the UI to reflect Client login
+  await expect(logoutLink).toBeVisible();
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(clientProfileLink).toBeVisible();
+  await expect(clientProfileLink).toBeVisible();
+
+  await clientQuestDashboardLink.click();
+  await expect(h1).toHaveText("Client Quest Dashboard");
+  await clientReviewButton.click();
+  await expect(h1).toHaveText("Review");
+  await expect(h2).toHaveText("Updated Quest 3");
+
+  await viewDetailsLink.click();
+  await expect(h1).toHaveText("Quest Details");
+  await page.goBack();
+  await moveToCompletedButton.click();
+
+  await clientQuestDashboardLink.click();
+  await expect(h1).toHaveText("Client Quest Dashboard");
+  await clientCompletedButton.click();
+
+  await expect(h1).toHaveText("Completed");
+  await viewDetailsLink.click();
+  await expect(h1).toHaveText("Quest Details");
+  await expect(h2).toHaveText("Updated Quest 3");
+
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});
+
+test("Client deletes created quests", async ({ page }) => {
+  const {
+    loginLink,
+    logoutLink,
+    clientProfileLink,
+    clientQuestDashboardLink,
+    deleteQuestButton,
+    viewMyQuestsLink,
+    viewQuestLink,
+    viewAllQuestsLink,
+  } = clientQuestElements(page);
+
+  const h1 = page.locator("h1");
+  const h2 = page.locator("h2");
+
+  const googleButton = page.getByRole("button", {
+    name: /continue with google/i,
+  });
+
+  // 🏠 Navigate to homepage
+  await page.goto("/");
+
+  // 👉 Auth0 / Google login flow
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await expect(googleButton).toBeVisible();
+  await googleButton.click();
+
+  // 📧 Gmail login
+  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
+  await page.getByRole("button", { name: "Next" }).click();
+
+  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
+  await page.getByRole("button", { name: "Next" }).click();
+
+  // 1. Expect the UI to reflect Client login
+  await expect(logoutLink).toBeVisible();
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(clientProfileLink).toBeVisible();
+  await expect(clientProfileLink).toBeVisible();
+
+  await clientQuestDashboardLink.click();
+  await expect(h1).toHaveText("Client Quest Dashboard");
+  await viewMyQuestsLink.click();
+  await expect(h1).toHaveText("My Quests");
+  await viewQuestLink.first().click();
+  await expect(h1).toHaveText("Quest Details");
+  await expect(h2).toHaveText("Updated Quest 3");
+  await page.waitForTimeout(500);
+  await deleteQuestButton.click();
+
+  await clientQuestDashboardLink.click();
+  await expect(h1).toHaveText("Client Quest Dashboard");
+  await viewMyQuestsLink.click();
+  await expect(h1).toHaveText("My Quests");
+  await viewQuestLink.first().click();
+  await expect(h1).toHaveText("Quest Details");
+  await expect(h2).toHaveText("Quest 2");
+  await page.waitForTimeout(500);
+  await deleteQuestButton.click();
+
+  await clientQuestDashboardLink.click();
+  await expect(h1).toHaveText("Client Quest Dashboard");
+  await viewMyQuestsLink.click();
+  await expect(h1).toHaveText("My Quests");
+  await viewQuestLink.first().click();
+  await expect(h1).toHaveText("Quest Details");
+  await expect(h2).toHaveText("Quest 1");
+  await page.waitForTimeout(500);
+  await deleteQuestButton.click();
+
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
 });

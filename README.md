@@ -14,16 +14,15 @@ run_registration.sh
 ```
 
 #### 3.
-Then either
+Then:
 
 ```
-client_tests.sh
-```
-
-or
-
-```
-dev_tests.sh
+all_tests.sh
 ```
 
 
+### Create quests for testing
+
+```
+create_quests.sh
+```

@@ -8,7 +8,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["@playwright/test"],
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": ".",                         
+    "paths": {
+      "@/*": ["./*"]                        
+    }
   },
-  "include": ["tests", "playwright.config.ts"]
+  "include": ["tests", "playwright.config.ts", "pages"]
 }

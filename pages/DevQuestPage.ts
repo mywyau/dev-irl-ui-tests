@@ -12,7 +12,7 @@ export const devQuestElements = (page: Page) => ({
 
   viewQuestLink: page.getByRole("link", { name: "View Quest →" }),
   acceptQuestButton: page.getByRole("button", { name: "Accept Quest" }),
-  viewDetailsButton: page.getByRole("button", { name: "View Details" }),
+  viewDetailsLink: page.getByRole("link", { name: "View Details" }),
 
   notStartedButton: page.getByRole("button", { name: "Not Started" }),
   inProgressButton: page.getByRole("button", { name: "In Progress" }),

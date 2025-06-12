@@ -168,7 +168,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
     logoutLink,
     devProfileLink,
     devQuestDashboardLink,
-    viewDetailsButton,
+    viewDetailsLink,
     viewQuestLink,
     viewAllQuestsLink,
     acceptQuestButton,
@@ -220,7 +220,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await notStartedButton.click();
   await expect(h1).toHaveText("Not Started");
   await expect(h2).toHaveText("Updated Quest 3");
-  await viewDetailsButton.click();
+  await viewDetailsLink.click();
   await expect(h1).toHaveText("Quest Details");
   await page.goBack();
   await moveToInProgressButton.click();
@@ -229,7 +229,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await inProgressButton.click();
   await expect(h1).toHaveText("In Progress");
   await expect(h2).toHaveText("Updated Quest 3");
-  await viewDetailsButton.click();
+  await viewDetailsLink.click();
   await expect(h1).toHaveText("Quest Details");
   await page.goBack();
   await moveToReviewButton.click();
@@ -238,7 +238,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await reviewButton.click();
   await expect(h1).toHaveText("Review");
   await expect(h2).toHaveText("Updated Quest 3");
-  await viewDetailsButton.click();
+  await viewDetailsLink.click();
   await page.goBack();
 
   await logoutLink.click();

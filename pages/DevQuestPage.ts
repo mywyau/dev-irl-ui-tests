@@ -10,9 +10,9 @@ export const devQuestElements = (page: Page) => ({
   viewAllPublicQuestsLink: page.getByRole("link", { name: "View all quests" }),
   createAQuestLink: page.getByRole("link", { name: "Create a quest" }),
 
-  viewQuestLink: page.getByRole("link", { name: "View Quest →" }),
+  detailsLink: page.getByRole("link", { name: "Details" }),
   acceptQuestButton: page.getByRole("button", { name: "Accept Quest" }),
-  viewDetailsButton: page.getByRole("button", { name: "View Details" }),
+  viewDetailsLink: page.getByRole("link", { name: "View Details" }),
 
   notStartedButton: page.getByRole("button", { name: "Not Started" }),
   inProgressButton: page.getByRole("button", { name: "In Progress" }),

@@ -3,7 +3,7 @@ import { Page } from "@playwright/test";
 export const clientQuestElements = (page: Page) => ({
   loginLink: page.getByRole("link", { name: "Login" }),
   logoutLink: page.getByRole("link", { name: "Logout" }),
-  viewQuestLink: page.getByRole("link", { name: "View Quest →" }),
+  detailsLink: page.getByRole("link", { name: "Details" }),
   viewAllQuestsLink: page.getByRole("link", { name: "View all quests" }),
   viewDetailsLink: page.getByRole("link", { name: "View Details" }),
   viewMyQuestsLink: page.getByRole("link", { name: "View my quests" }),

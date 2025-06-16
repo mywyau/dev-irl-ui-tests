@@ -1,10 +1,12 @@
-import { Locator, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 
 export const devQuestElements = (page: Page) => ({
   loginLink: page.getByRole("link", { name: "Login" }),
   logoutLink: page.getByRole("link", { name: "Logout" }),
   viewAllQuestsLink: page.getByRole("link", { name: "View all quests" }),
-  devQuestDashboardLink: page.getByRole("link", { name: "Dev Quests Dashboard" }),
+  devQuestDashboardLink: page.getByRole("link", {
+    name: "Dev Quests Dashboard",
+  }),
   createQuestLink: page.getByRole("link", { name: " Create Quest " }),
   devProfileLink: page.getByRole("link", { name: "Dev Profile" }),
   viewAllPublicQuestsLink: page.getByRole("link", { name: "View all quests" }),
@@ -21,6 +23,7 @@ export const devQuestElements = (page: Page) => ({
   moveToInProgressButton: page.getByRole("button", {
     name: "Move quest to In Progress",
   }),
+  
   moveToReviewButton: page.getByRole("button", {
     name: "Move quest to in Review",
   }),
@@ -29,5 +32,17 @@ export const devQuestElements = (page: Page) => ({
   }),
   moveToFailedButton: page.getByRole("button", {
     name: "Move quest to Failed",
+  }),
+
+  uploadFileButton: page.getByRole("button", {
+    name: "Upload File",
+  }),
+
+  chooseFileButton: page.getByRole("button", {
+    name: "Choose File",
+  }),
+
+  uploadButton: page.getByRole("button", {
+    name: "Upload",
   }),
 });

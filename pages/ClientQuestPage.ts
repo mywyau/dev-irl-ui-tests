@@ -18,6 +18,8 @@ export const clientQuestElements = (page: Page) => ({
   viewAllPublicQuestsLink: page.getByRole("link", { name: "View all quests" }),
   createAQuestLink: page.getByRole("link", { name: "Create a quest" }),
 
+  clientInProgressButton: page.getByRole("button", { name: "In Progress" }),
+
   clientReviewButton: page.getByRole("button", { name: "Review" }),
 
   clientCompletedButton: page.getByRole("button", { name: "Completed" }),
@@ -27,5 +29,8 @@ export const clientQuestElements = (page: Page) => ({
   }),
   moveToFailedButton: page.getByRole("button", {
     name: "Fail Quest",
+  }),
+  downloadButton: page.getByRole("button", {
+    name: "Download",
   }),
 });

@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 import {
   testClientUserEmail2,
-  testClientUserPassword2
+  testClientUserPassword2,
 } from "@/configuration/Appconfig";
 
 import { clientQuestElements } from "@/pages/ClientQuestPage";
@@ -55,23 +55,63 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await page.waitForTimeout(250);
   await expect(h1).toHaveText("Create a New Quest");
 
+  // 1) Open the dropdown:
+  const trigger = page.locator("#rank-select");
+  await expect(trigger).toBeVisible();
+  await page.waitForTimeout(500);
+  await trigger.click();
+
+  // 2) Click “Mithril"
+  // Wait for dropdown panel to appear
+  // Ensure it's visible before clicking
+  await page.locator('div[role="option"]', { hasText: "Mithril" }).click();
+  await page.waitForTimeout(1000);
+
   await page.fill("#quest-title", "Quest 1");
   await page.fill("#quest-description", "Some description for quest 1");
+  await page.fill("#acceptance-criteria", "Some acceptance criteria");
+  await page.waitForTimeout(500);
   await createQuestButton.click();
 
-  // wait 500 ms before doing the next one
   await page.waitForTimeout(500);
+
+  // 1) Open the dropdown:
+  await expect(trigger).toBeVisible();
+  await page.waitForTimeout(500);
+  await trigger.click();
+
+  // 2) Click “Mithril"
+  // Wait for dropdown panel to appear
+  // Ensure it's visible before clicking
+  await page.locator('div[role="option"]', { hasText: "Demon" }).click();
+  await page.waitForTimeout(1000);
 
   await page.fill("#quest-title", "Quest 2");
   await page.fill("#quest-description", "Some description for quest 2");
+  await page.fill("#acceptance-criteria", "Some acceptance criteria 2");
+  await page.waitForTimeout(500);
   await createQuestButton.click();
 
-  // another 500 ms pause
   await page.waitForTimeout(500);
+
+  // 1) Open the dropdown:
+  await expect(trigger).toBeVisible();
+  await page.waitForTimeout(500);
+  await trigger.click();
+
+  // 2) Click “Mithril"
+  // Wait for dropdown panel to appear
+  // Ensure it's visible before clicking
+  await page.locator('div[role="option"]', { hasText: "Aether" }).click();
+  await page.waitForTimeout(1000);
 
   await page.fill("#quest-title", "Quest 3");
   await page.fill("#quest-description", "Some description for quest 3");
+  await page.fill("#acceptance-criteria", "Some acceptance criteria 3");
+  await page.waitForTimeout(500);
   await createQuestButton.click();
+
+  await page.waitForTimeout(500);
 
   await viewAllPublicQuestsLink.click();
   await expect(h1).toHaveText("All Available Open Quests");

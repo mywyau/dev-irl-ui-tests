@@ -22,7 +22,7 @@ test("Dev 1 - Delete dev profile", async ({ page }) => {
   // 👤 Dev-specific navigation links
   const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
   const devDashboardLink = page.getByRole("link", {
-    name: "Dev Quests Dashboard",
+    name: "Dashboard",
   });
   const devProfileLink = page.getByRole("link", { name: "Dev Profile" });
 
@@ -69,7 +69,7 @@ test("Client 1 - Login and delete the test client user profile", async ({
   // 👤 Dev-specific navigation links
   const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
   const clientDashboardLink = page.getByRole("link", {
-    name: "Client Quests Dashboard",
+    name: "Dashboard",
   });
   const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
 
@@ -114,7 +114,7 @@ test("Dev 2 - Delete dev profile", async ({ page }) => {
   // 👤 Dev-specific navigation links
   const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
   const devDashboardLink = page.getByRole("link", {
-    name: "Dev Quests Dashboard",
+    name: "Dashboard",
   });
   const devProfileLink = page.getByRole("link", { name: "Dev Profile" });
 
@@ -161,7 +161,7 @@ test("Client 2 - Login and delete the test client user profile", async ({
   // 👤 Dev-specific navigation links
   const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
   const clientDashboardLink = page.getByRole("link", {
-    name: "Client Quests Dashboard",
+    name: "Dashboard",
   });
   const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
 

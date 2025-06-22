@@ -212,7 +212,7 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await expect(clientProfileLink).toBeVisible();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await viewMyQuestsLink.click();
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
@@ -229,7 +229,7 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await updateQuestButton.click();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await viewMyQuestsLink.click();
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
@@ -299,7 +299,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await expect(h1).toHaveText("Quest Details");
   await acceptQuestButton.click();
   await devQuestDashboardLink.click();
-  await expect(h1).toHaveText("Dev Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await notStartedButton.click();
   await expect(h1).toHaveText("Not Started");
   await expect(h2).toHaveText("Updated Quest 3");
@@ -308,7 +308,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await page.goBack();
   await moveToInProgressButton.click();
   await devQuestDashboardLink.click();
-  await expect(h1).toHaveText("Dev Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await inProgressButton.click();
   await expect(h1).toHaveText("In Progress");
   await expect(h2).toHaveText("Updated Quest 3");
@@ -317,7 +317,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await page.goBack();
   await moveToReviewButton.click();
   await devQuestDashboardLink.click();
-  await expect(h1).toHaveText("Dev Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await reviewButton.click();
   await expect(h1).toHaveText("Review");
   await expect(h2).toHaveText("Updated Quest 3");
@@ -377,7 +377,7 @@ test("Client user logs in with Google, is able to move a quest in Review to Comp
   await expect(clientProfileLink).toBeVisible();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await clientReviewButton.click();
   await expect(h1).toHaveText("Review");
   await expect(h2).toHaveText("Updated Quest 3");
@@ -388,7 +388,7 @@ test("Client user logs in with Google, is able to move a quest in Review to Comp
   await moveToCompletedButton.click();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await clientCompletedButton.click();
 
   await expect(h1).toHaveText("Completed");
@@ -443,7 +443,7 @@ test("Client deletes created quests", async ({ page }) => {
   await expect(clientProfileLink).toBeVisible();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await viewMyQuestsLink.click();
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
@@ -453,7 +453,7 @@ test("Client deletes created quests", async ({ page }) => {
   await deleteQuestButton.click();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await viewMyQuestsLink.click();
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
@@ -463,7 +463,7 @@ test("Client deletes created quests", async ({ page }) => {
   await deleteQuestButton.click();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await viewMyQuestsLink.click();
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();

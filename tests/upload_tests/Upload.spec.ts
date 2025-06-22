@@ -235,7 +235,7 @@ test("Dev 2 - user logs in with Google, is able to accept some quests and move i
   await acceptQuestButton.click();
 
   await devQuestDashboardLink.click();
-  await expect(h1).toHaveText("Dev Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await notStartedButton.click();
   await expect(h1).toHaveText("Not Started");
 
@@ -245,7 +245,7 @@ test("Dev 2 - user logs in with Google, is able to accept some quests and move i
   await moveToInProgressButton.nth(1).click();
 
   await devQuestDashboardLink.click();
-  await expect(h1).toHaveText("Dev Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
 
   await inProgressButton.click();
   await expect(h1).toHaveText("In Progress");
@@ -254,7 +254,7 @@ test("Dev 2 - user logs in with Google, is able to accept some quests and move i
   await moveToReviewButton.nth(0).click();
 
   await devQuestDashboardLink.click();
-  await expect(h1).toHaveText("Dev Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await reviewButton.click();
   await expect(h1).toHaveText("Review");
   await expect(h2.nth(0)).toHaveText("Upload File Quest 2");
@@ -308,7 +308,7 @@ test("Dev 2 - When the task is in 'In Progress' a Developer can upload a file - 
   await expect(devProfileLink).toBeVisible();
 
   await devQuestDashboardLink.click();
-  await expect(h1).toHaveText("Dev Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
 
   // await inProgressButton.click();
   await inProgressButton.click();
@@ -378,7 +378,7 @@ test("Dev 2 - When the task is in 'Review' a Developer can upload a file", async
   await expect(devProfileLink).toBeVisible();
 
   await devQuestDashboardLink.click();
-  await expect(h1).toHaveText("Dev Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
 
   await reviewButton.click();
   await expect(h1).toHaveText("Review");
@@ -443,7 +443,7 @@ test("Client 2 - Client is able to download a file uploaded by the dev for a tas
   await expect(clientProfileLink).toBeVisible();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
 
   await clientInProgressButton.click();
   await expect(h1).toHaveText("In Progress");
@@ -508,7 +508,7 @@ test("Client 2 - Client is able to download a file uploaded by the dev for a tas
   await expect(clientProfileLink).toBeVisible();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await clientReviewButton.click();
   await expect(h1).toHaveText("Review");
   await expect(h2).toHaveText("Upload File Quest 2");
@@ -526,7 +526,7 @@ test("Client 2 - Client is able to download a file uploaded by the dev for a tas
   await download.saveAs(`downloads/${suggestedFilename}`);
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await clientReviewButton.click();
   await expect(h1).toHaveText("Review");
   await expect(h2).toHaveText("Upload File Quest 2");
@@ -578,7 +578,7 @@ test("Client 2 - can only delete Open or Completed Quests", async ({
   await expect(clientProfileLink).toBeVisible();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await viewMyQuestsLink.click();
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
@@ -588,7 +588,7 @@ test("Client 2 - can only delete Open or Completed Quests", async ({
   await deleteQuestButton.click();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await viewMyQuestsLink.click();
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
@@ -598,7 +598,7 @@ test("Client 2 - can only delete Open or Completed Quests", async ({
   await deleteQuestButton.click();
 
   await clientQuestDashboardLink.click();
-  await expect(h1).toHaveText("Client Quest Dashboard");
+  await expect(h1).toHaveText("Quest Dashboard");
   await viewMyQuestsLink.click();
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();

@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test";
 
 import {
   testDevUserEmail1,
-  testDevUserPassword1,
   testDevUserEmail2,
-  testDevUserPassword2
+  testDevUserPassword1,
+  testDevUserPassword2,
 } from "@/configuration/Appconfig";
 
 test("Dev 1 user logs in with Google, is able to complete registration", async ({
@@ -20,7 +20,7 @@ test("Dev 1 user logs in with Google, is able to complete registration", async (
   // 👤 Dev-specific navigation links
   const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
   const devQuestDashboardLink = page.getByRole("link", {
-    name: "Dev Quests Dashboard",
+    name: "Dashboard",
   });
   const devProfileLink = page.getByRole("link", { name: "Dev Profile" });
 
@@ -81,7 +81,6 @@ test("Dev 1 user logs in with Google, is able to complete registration", async (
   await expect(loginLink).toBeVisible();
 });
 
-
 test("Dev 2 user logs in with Google, is able to complete registration", async ({
   page,
 }) => {
@@ -95,7 +94,7 @@ test("Dev 2 user logs in with Google, is able to complete registration", async (
   // 👤 Dev-specific navigation links
   const viewAllQuestsLink = page.getByRole("link", { name: "View all quests" });
   const devQuestDashboardLink = page.getByRole("link", {
-    name: "Dev Quests Dashboard",
+    name: "Dashboard",
   });
   const devProfileLink = page.getByRole("link", { name: "Dev Profile" });
 

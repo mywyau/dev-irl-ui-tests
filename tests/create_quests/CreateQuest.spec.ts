@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  testClientUserEmail2,
-  testClientUserPassword2,
+  testClientUserEmail1,
+  testClientUserPassword1,
 } from "@/configuration/Appconfig";
 
 import { clientQuestElements } from "@/pages/ClientQuestPage";
@@ -37,10 +37,10 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
+  await page.getByLabel("Email or phone").fill(testClientUserEmail1);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
+  await page.getByLabel("Enter your password").fill(testClientUserPassword1);
   await page.getByRole("button", { name: "Next" }).click();
 
   // ✅ Expect the UI to reflect Client login

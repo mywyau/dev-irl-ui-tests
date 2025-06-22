@@ -5,10 +5,10 @@ export const devQuestElements = (page: Page) => ({
   logoutLink: page.getByRole("link", { name: "Logout" }),
   viewAllQuestsLink: page.getByRole("link", { name: "View all quests" }),
   devQuestDashboardLink: page.getByRole("link", {
-    name: "Dev Quests Dashboard",
+    name: "Dashboard",
   }),
   createQuestLink: page.getByRole("link", { name: " Create Quest " }),
-  devProfileLink: page.getByRole("link", { name: "Dev Profile" }),
+  devProfileLink: page.getByRole("link", { name: "Profile" }),
   viewAllPublicQuestsLink: page.getByRole("link", { name: "View all quests" }),
   createAQuestLink: page.getByRole("link", { name: "Create a quest" }),
 

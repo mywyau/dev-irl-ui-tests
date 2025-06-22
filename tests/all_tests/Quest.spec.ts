@@ -68,6 +68,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
 
   // 1) Open the dropdown:
   const trigger = page.locator("#rank-select");
+
   await expect(trigger).toBeVisible();
   await page.waitForTimeout(500);
   await trigger.click();
@@ -188,6 +189,8 @@ test("Client can edit a previously created quest", async ({ page }) => {
     name: /continue with google/i,
   });
 
+  const trigger = page.locator("#rank-select");
+
   // 🏠 Navigate to homepage
   await page.goto("/");
 
@@ -217,15 +220,30 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Quest 3");
   await page.waitForTimeout(500);
 
   await editQuestButton.click();
 
   await page.waitForTimeout(250);
   await expect(h1).toHaveText("Edit Quest");
+
+  // 1) Open the dropdown:
+  await expect(trigger).toBeVisible();
+  await page.waitForTimeout(500);
+  await trigger.click();
+
+  // 2) Click Aether"
+  // Wait for dropdown panel to appear
+  // Ensure it's visible before clicking
+  await page.locator('div[role="option"]', { hasText: "Aether" }).click();
+  await page.waitForTimeout(1000);
+
   await page.fill("#quest-title", "Updated Quest 3");
-  await page.fill("#quest-description", "Some updated description for quest 3");
+  await page.fill(
+    "#quest-description",
+    "Some updated description for quest 3 to make it harder"
+  );
   await updateQuestButton.click();
 
   await clientQuestDashboardLink.click();
@@ -234,7 +252,7 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Updated Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
 
   // TODO: Fix;
   await logoutLink.click();
@@ -302,7 +320,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await expect(h1).toHaveText("Quest Dashboard");
   await notStartedButton.click();
   await expect(h1).toHaveText("Not Started");
-  await expect(h2).toHaveText("Updated Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
   await viewDetailsLink.click();
   await expect(h1).toHaveText("Quest Details");
   await page.goBack();
@@ -311,7 +329,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await expect(h1).toHaveText("Quest Dashboard");
   await inProgressButton.click();
   await expect(h1).toHaveText("In Progress");
-  await expect(h2).toHaveText("Updated Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
   await viewDetailsLink.click();
   await expect(h1).toHaveText("Quest Details");
   await page.goBack();
@@ -320,7 +338,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await expect(h1).toHaveText("Quest Dashboard");
   await reviewButton.click();
   await expect(h1).toHaveText("Review");
-  await expect(h2).toHaveText("Updated Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
   await viewDetailsLink.click();
   await page.goBack();
 
@@ -380,7 +398,7 @@ test("Client user logs in with Google, is able to move a quest in Review to Comp
   await expect(h1).toHaveText("Quest Dashboard");
   await clientReviewButton.click();
   await expect(h1).toHaveText("Review");
-  await expect(h2).toHaveText("Updated Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
 
   await viewDetailsLink.click();
   await expect(h1).toHaveText("Quest Details");
@@ -394,7 +412,7 @@ test("Client user logs in with Google, is able to move a quest in Review to Comp
   await expect(h1).toHaveText("Completed");
   await viewDetailsLink.click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Updated Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
 
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
@@ -448,7 +466,7 @@ test("Client deletes created quests", async ({ page }) => {
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Updated Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
   await page.waitForTimeout(500);
   await deleteQuestButton.click();
 
@@ -458,7 +476,7 @@ test("Client deletes created quests", async ({ page }) => {
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Quest 2");
+  await expect(page.locator("#quest-title")).toHaveText("Quest 2");
   await page.waitForTimeout(500);
   await deleteQuestButton.click();
 
@@ -468,7 +486,7 @@ test("Client deletes created quests", async ({ page }) => {
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Quest 1");
+  await expect(page.locator("#quest-title")).toHaveText("Quest 1");
   await page.waitForTimeout(500);
   await deleteQuestButton.click();
 

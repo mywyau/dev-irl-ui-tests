@@ -22,7 +22,7 @@ test("Dev 1 user logs in with Google, is able to complete registration", async (
   const devQuestDashboardLink = page.getByRole("link", {
     name: "Dashboard",
   });
-  const devProfileLink = page.getByRole("link", { name: "Dev Profile" });
+  const devProfileLink = page.getByRole("link", { name: "Profile" });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();
@@ -96,7 +96,7 @@ test("Dev 2 user logs in with Google, is able to complete registration", async (
   const devQuestDashboardLink = page.getByRole("link", {
     name: "Dashboard",
   });
-  const devProfileLink = page.getByRole("link", { name: "Dev Profile" });
+  const devProfileLink = page.getByRole("link", { name: "Profile" });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();

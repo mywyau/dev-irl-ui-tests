@@ -24,7 +24,7 @@ test("Dev 1 - Delete dev profile", async ({ page }) => {
   const devDashboardLink = page.getByRole("link", {
     name: "Dashboard",
   });
-  const devProfileLink = page.getByRole("link", { name: "Dev Profile" });
+  const devProfileLink = page.getByRole("link", { name: "Profile" });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();
@@ -71,7 +71,7 @@ test("Client 1 - Login and delete the test client user profile", async ({
   const clientDashboardLink = page.getByRole("link", {
     name: "Dashboard",
   });
-  const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
+  const clientProfileLink = page.getByRole("link", { name: "Profile" });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();
@@ -116,7 +116,7 @@ test("Dev 2 - Delete dev profile", async ({ page }) => {
   const devDashboardLink = page.getByRole("link", {
     name: "Dashboard",
   });
-  const devProfileLink = page.getByRole("link", { name: "Dev Profile" });
+  const devProfileLink = page.getByRole("link", { name: "Profile" });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();
@@ -163,7 +163,7 @@ test("Client 2 - Login and delete the test client user profile", async ({
   const clientDashboardLink = page.getByRole("link", {
     name: "Dashboard",
   });
-  const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
+  const clientProfileLink = page.getByRole("link", { name: "Profile" });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();

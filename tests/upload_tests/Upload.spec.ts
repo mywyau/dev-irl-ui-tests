@@ -221,17 +221,16 @@ test("Dev 2 - user logs in with Google, is able to accept some quests and move i
   await viewAllQuestsLink.click();
   await expect(h1).toHaveText("All Available Open Quests");
 
-  // await detailsLink.first().click();  // this needs to change we need to do two quests at once
   const detailsLinks = page.locator('[data-testid^="details-link-"]');
   await detailsLinks.nth(2).click(); // Clicks the second "Details" link
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Upload File Quest 1");
+  await expect(page.locator("#quest-title")).toHaveText("Upload File Quest 1");
   await acceptQuestButton.click();
 
   await page.goBack();
   await detailsLinks.nth(1).click(); // Clicks the third "Details" link
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Upload File Quest 2");
+  await expect(page.locator("#quest-title")).toHaveText("Upload File Quest 2");
   await acceptQuestButton.click();
 
   await devQuestDashboardLink.click();
@@ -239,8 +238,12 @@ test("Dev 2 - user logs in with Google, is able to accept some quests and move i
   await notStartedButton.click();
   await expect(h1).toHaveText("Not Started");
 
-  await expect(page.locator("h2").nth(0)).toHaveText("Upload File Quest 2");
-  await expect(page.locator("h2").nth(1)).toHaveText("Upload File Quest 1");
+  await expect(page.locator("#quest-title").nth(0)).toHaveText(
+    "Upload File Quest 2"
+  );
+  await expect(page.locator("#quest-title").nth(1)).toHaveText(
+    "Upload File Quest 1"
+  );
   await moveToInProgressButton.nth(0).click();
   await moveToInProgressButton.nth(1).click();
 
@@ -249,15 +252,21 @@ test("Dev 2 - user logs in with Google, is able to accept some quests and move i
 
   await inProgressButton.click();
   await expect(h1).toHaveText("In Progress");
-  await expect(page.locator("h2").nth(0)).toHaveText("Upload File Quest 2");
-  await expect(page.locator("h2").nth(1)).toHaveText("Upload File Quest 1");
+  await expect(page.locator("#quest-title").nth(0)).toHaveText(
+    "Upload File Quest 2"
+  );
+  await expect(page.locator("#quest-title").nth(1)).toHaveText(
+    "Upload File Quest 1"
+  );
   await moveToReviewButton.nth(0).click();
 
   await devQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
   await reviewButton.click();
   await expect(h1).toHaveText("Review");
-  await expect(h2.nth(0)).toHaveText("Upload File Quest 2");
+  await expect(page.locator("#quest-title").nth(0)).toHaveText(
+    "Upload File Quest 2"
+  );
 
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
@@ -313,7 +322,10 @@ test("Dev 2 - When the task is in 'In Progress' a Developer can upload a file - 
   // await inProgressButton.click();
   await inProgressButton.click();
   await expect(h1).toHaveText("In Progress");
-  await expect(h2).toHaveText("Upload File Quest 1");
+  await expect(page.locator("#quest-title").nth(0)).toHaveText(
+    "Upload File Quest 1"
+  );
+
   await uploadFileButton.click();
 
   // Upload the file
@@ -345,7 +357,6 @@ test("Dev 2 - When the task is in 'Review' a Developer can upload a file", async
   } = devQuestElements(page);
 
   const h1 = page.locator("h1");
-  const h2 = page.locator("h2");
 
   const googleButton = page.getByRole("button", {
     name: /Continue with google/i,
@@ -382,7 +393,7 @@ test("Dev 2 - When the task is in 'Review' a Developer can upload a file", async
 
   await reviewButton.click();
   await expect(h1).toHaveText("Review");
-  await expect(h2).toHaveText("Upload File Quest 2");
+  await expect(page.locator("#quest-title")).toHaveText("Upload File Quest 2");
   await uploadFileButton.click();
 
   // Upload the file
@@ -414,7 +425,6 @@ test("Client 2 - Client is able to download a file uploaded by the dev for a tas
   } = clientQuestElements(page);
 
   const h1 = page.locator("h1");
-  const h2 = page.locator("h2");
 
   // 🏠 Navigate to homepage
   await page.goto("/");
@@ -447,7 +457,9 @@ test("Client 2 - Client is able to download a file uploaded by the dev for a tas
 
   await clientInProgressButton.click();
   await expect(h1).toHaveText("In Progress");
-  await expect(h2).toHaveText("Upload File Quest 1");
+  await expect(page.locator("#quest-title").nth(0)).toHaveText(
+    "Upload File Quest 1"
+  );
   await viewDetailsLink.click();
 
   await expect(h1).toHaveText("Quest Details");
@@ -479,7 +491,6 @@ test("Client 2 - Client is able to download a file uploaded by the dev for a tas
   } = clientQuestElements(page);
 
   const h1 = page.locator("h1");
-  const h2 = page.locator("h2");
 
   // 🏠 Navigate to homepage
   await page.goto("/");
@@ -511,7 +522,8 @@ test("Client 2 - Client is able to download a file uploaded by the dev for a tas
   await expect(h1).toHaveText("Quest Dashboard");
   await clientReviewButton.click();
   await expect(h1).toHaveText("Review");
-  await expect(h2).toHaveText("Upload File Quest 2");
+  await expect(page.locator("#quest-title")).toHaveText("Upload File Quest 2");
+
   await viewDetailsLink.click();
   await expect(h1).toHaveText("Quest Details");
   await downloadButton.click();
@@ -529,7 +541,7 @@ test("Client 2 - Client is able to download a file uploaded by the dev for a tas
   await expect(h1).toHaveText("Quest Dashboard");
   await clientReviewButton.click();
   await expect(h1).toHaveText("Review");
-  await expect(h2).toHaveText("Upload File Quest 2");
+  await expect(page.locator("#quest-title")).toHaveText("Upload File Quest 2");
   await moveToCompletedButton.click();
 });
 
@@ -548,7 +560,6 @@ test("Client 2 - can only delete Open or Completed Quests", async ({
   } = clientQuestElements(page);
 
   const h1 = page.locator("h1");
-  const h2 = page.locator("h2");
 
   const googleButton = page.getByRole("button", {
     name: /continue with google/i,
@@ -583,7 +594,7 @@ test("Client 2 - can only delete Open or Completed Quests", async ({
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Upload File Quest 3");
+  await expect(page.locator("#quest-title")).toHaveText("Upload File Quest 3");
   await page.waitForTimeout(500);
   await deleteQuestButton.click();
 
@@ -593,7 +604,7 @@ test("Client 2 - can only delete Open or Completed Quests", async ({
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Upload File Quest 2");
+  await expect(page.locator("#quest-title")).toHaveText("Upload File Quest 2");
   await page.waitForTimeout(500);
   await deleteQuestButton.click();
 
@@ -603,7 +614,7 @@ test("Client 2 - can only delete Open or Completed Quests", async ({
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
-  await expect(h2).toHaveText("Upload File Quest 1");
+  await expect(page.locator("#quest-title")).toHaveText("Upload File Quest 1");
   await page.waitForTimeout(500);
   await deleteQuestButton.click();
 

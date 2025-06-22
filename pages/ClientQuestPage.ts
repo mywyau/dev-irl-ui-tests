@@ -11,7 +11,7 @@ export const clientQuestElements = (page: Page) => ({
     name: " Dashboard",
   }),
   createQuestButton: page.getByRole("button", { name: "Create Quest" }),
-  clientProfileLink: page.getByRole("link", { name: "Client Profile" }),
+  clientProfileLink: page.getByRole("link", { name: "Profile" }),
   deleteQuestButton: page.getByRole("button", { name: "Delete quest" }),
   editQuestButton: page.getByRole("button", { name: "Edit quest" }),
   updateQuestButton: page.getByRole("button", { name: "Update quest" }),

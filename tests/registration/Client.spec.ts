@@ -22,7 +22,7 @@ test("Client 1 user logs in with Google, is able to complete registration", asyn
   const clientQuestDashboardLink = page.getByRole("link", {
     name: "Dashboard",
   });
-  const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
+  const clientProfileLink = page.getByRole("link", { name: "Profile" });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();
@@ -95,7 +95,7 @@ test("Client 2 user logs in with Google, is able to complete registration", asyn
   const clientQuestDashboardLink = page.getByRole("link", {
     name: "Dashboard",
   });
-  const clientProfileLink = page.getByRole("link", { name: "Client Profile" });
+  const clientProfileLink = page.getByRole("link", { name: "Profile" });
 
   // 👉 Auth0 / Google login flow
   await expect(loginLink).toBeVisible();

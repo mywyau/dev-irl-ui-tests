@@ -5,8 +5,8 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  testClientUserEmail2,
-  testClientUserPassword2,
+  testClientUserEmail1,
+  testClientUserPassword1,
   testDevUserEmail1,
   testDevUserPassword1,
 } from "@/configuration/Appconfig";
@@ -46,10 +46,10 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
+  await page.getByLabel("Email or phone").fill(testClientUserEmail1);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
+  await page.getByLabel("Enter your password").fill(testClientUserPassword1);
   await page.getByRole("button", { name: "Next" }).click();
 
   // ✅ Expect the UI to reflect Client login
@@ -78,6 +78,18 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await page.locator('div[role="option"]', { hasText: "Mithril" }).click();
   await page.waitForTimeout(1000);
 
+  await page.locator("#language-tag-selector").fill("Python");
+  await page.locator("#language-opt-python").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "Scala");
+  await page.locator("#language-opt-scala").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "TypeScript");
+  await page.locator("#language-opt-typescript").click();
+  await page.locator("#language-tag-selector").clear();
+
   await page.fill("#quest-title", "Quest 1");
   await page.fill("#quest-description", "Some description for quest 1");
   await page.fill("#acceptance-criteria", "Some acceptance criteria");
@@ -91,11 +103,23 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await page.waitForTimeout(500);
   await trigger.click();
 
-  // 2) Click “Mithril"
+  // 2) Click Demon"
   // Wait for dropdown panel to appear
   // Ensure it's visible before clicking
   await page.locator('div[role="option"]', { hasText: "Demon" }).click();
   await page.waitForTimeout(1000);
+
+  await page.locator("#language-tag-selector").fill("Python");
+  await page.locator("#language-opt-python").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "Scala");
+  await page.locator("#language-opt-scala").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "TypeScript");
+  await page.locator("#language-opt-typescript").click();
+  await page.locator("#language-tag-selector").clear();
 
   await page.fill("#quest-title", "Quest 2");
   await page.fill("#quest-description", "Some description for quest 2");
@@ -110,11 +134,23 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await page.waitForTimeout(500);
   await trigger.click();
 
-  // 2) Click “Mithril"
+  // 2) Click Aether"
   // Wait for dropdown panel to appear
   // Ensure it's visible before clicking
   await page.locator('div[role="option"]', { hasText: "Aether" }).click();
   await page.waitForTimeout(1000);
+
+  await page.locator("#language-tag-selector").fill("Python");
+  await page.locator("#language-opt-python").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "Scala");
+  await page.locator("#language-opt-scala").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "TypeScript");
+  await page.locator("#language-opt-typescript").click();
+  await page.locator("#language-tag-selector").clear();
 
   await page.fill("#quest-title", "Quest 3");
   await page.fill("#quest-description", "Some description for quest 3");
@@ -163,10 +199,10 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
+  await page.getByLabel("Email or phone").fill(testClientUserEmail1);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
+  await page.getByLabel("Enter your password").fill(testClientUserPassword1);
   await page.getByRole("button", { name: "Next" }).click();
 
   // 1. Expect the UI to reflect Client login
@@ -292,7 +328,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await expect(loginLink).toBeVisible();
 });
 
-test("Clinet user logs in with Google, is able to move a quest in Review to Completed", async ({
+test("Client user logs in with Google, is able to move a quest in Review to Completed", async ({
   page,
 }) => {
   const {
@@ -328,10 +364,10 @@ test("Clinet user logs in with Google, is able to move a quest in Review to Comp
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
+  await page.getByLabel("Email or phone").fill(testClientUserEmail1);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
+  await page.getByLabel("Enter your password").fill(testClientUserPassword1);
   await page.getByRole("button", { name: "Next" }).click();
 
   // 1. Expect the UI to reflect Client login
@@ -394,10 +430,10 @@ test("Client deletes created quests", async ({ page }) => {
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testClientUserEmail2);
+  await page.getByLabel("Email or phone").fill(testClientUserEmail1);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testClientUserPassword2);
+  await page.getByLabel("Enter your password").fill(testClientUserPassword1);
   await page.getByRole("button", { name: "Next" }).click();
 
   // 1. Expect the UI to reflect Client login

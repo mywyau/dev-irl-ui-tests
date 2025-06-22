@@ -1,5 +1,4 @@
 // These tests bleed into each other i.e. they sequentially set next test up with data creation, edits etc.
-
 // Note to self do not let tests/app/data state bleed from one spec to another. As a necessary evil keep within the same spec.
 
 import { expect, test } from "@playwright/test";
@@ -7,8 +6,8 @@ import { expect, test } from "@playwright/test";
 import {
   testClientUserEmail2,
   testClientUserPassword2,
-  testDevUserEmail1,
-  testDevUserPassword1,
+  testDevUserEmail2,
+  testDevUserPassword2,
 } from "@/configuration/Appconfig";
 
 import { devQuestElements } from "@/pages/DevQuestPage";
@@ -19,7 +18,7 @@ import path from "path";
 
 fs.emptyDirSync(path.resolve(__dirname, "../../downloads"));
 
-test("Client user logs in with Google, is able to create multiple quests", async ({
+test("Client 2 - user logs in with Google, is able to create multiple quests", async ({
   page,
 }) => {
   const {
@@ -81,6 +80,18 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await page.locator('div[role="option"]', { hasText: "Mithril" }).click();
   await page.waitForTimeout(1000);
 
+  await page.locator("#language-tag-selector").fill("Python");
+  await page.locator("#language-opt-python").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "Scala");
+  await page.locator("#language-opt-scala").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "TypeScript");
+  await page.locator("#language-opt-typescript").click();
+  await page.locator("#language-tag-selector").clear();
+
   await page.fill("#quest-title", "Upload File Quest 1");
   await page.fill("#quest-description", "Some description for quest 1");
   await page.fill("#acceptance-criteria", "Some acceptance criteria");
@@ -100,6 +111,18 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await page.locator('div[role="option"]', { hasText: "Demon" }).click();
   await page.waitForTimeout(1000);
 
+  await page.locator("#language-tag-selector").fill("Python");
+  await page.locator("#language-opt-python").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "Scala");
+  await page.locator("#language-opt-scala").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "TypeScript");
+  await page.locator("#language-opt-typescript").click();
+  await page.locator("#language-tag-selector").clear();
+
   await page.fill("#quest-title", "Upload File Quest 2");
   await page.fill("#quest-description", "Some description for quest 2");
   await page.fill("#acceptance-criteria", "Some acceptance criteria 2");
@@ -113,11 +136,23 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await page.waitForTimeout(500);
   await trigger.click();
 
-  // 2) Click “Mithril"
+  // 2) Click “Aether"
   // Wait for dropdown panel to appear
   // Ensure it's visible before clicking
   await page.locator('div[role="option"]', { hasText: "Aether" }).click();
   await page.waitForTimeout(1000);
+
+  await page.locator("#language-tag-selector").fill("Python");
+  await page.locator("#language-opt-python").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "Scala");
+  await page.locator("#language-opt-scala").click();
+  await page.locator("#language-tag-selector").clear();
+
+  await page.fill("#language-tag-selector", "TypeScript");
+  await page.locator("#language-opt-typescript").click();
+  await page.locator("#language-tag-selector").clear();
 
   await page.fill("#quest-title", "Upload File Quest 3");
   await page.fill("#quest-description", "Some description for quest 3");
@@ -135,7 +170,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await expect(loginLink).toBeVisible();
 });
 
-test("Dev user logs in with Google, is able to accept some quests and move it from NotStarted -> InProgress -> Review", async ({
+test("Dev 2 - user logs in with Google, is able to accept some quests and move it from NotStarted -> InProgress -> Review", async ({
   page,
 }) => {
   const {
@@ -143,8 +178,6 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
     logoutLink,
     devProfileLink,
     devQuestDashboardLink,
-    viewDetailsLink,
-    detailsLink,
     viewAllQuestsLink,
     acceptQuestButton,
     notStartedButton,
@@ -172,10 +205,10 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testDevUserEmail1);
+  await page.getByLabel("Email or phone").fill(testDevUserEmail2);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testDevUserPassword1);
+  await page.getByLabel("Enter your password").fill(testDevUserPassword2);
   await page.getByRole("button", { name: "Next" }).click();
 
   // 1. Expect the UI to reflect Client login
@@ -208,11 +241,8 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
 
   await expect(page.locator("h2").nth(0)).toHaveText("Upload File Quest 2");
   await expect(page.locator("h2").nth(1)).toHaveText("Upload File Quest 1");
-  // await page.locator("h2").nth(0).click();
   await moveToInProgressButton.nth(0).click();
   await moveToInProgressButton.nth(1).click();
-
-  // await page.pause();
 
   await devQuestDashboardLink.click();
   await expect(h1).toHaveText("Dev Quest Dashboard");
@@ -233,7 +263,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await expect(loginLink).toBeVisible();
 });
 
-test("When the task is in 'In Progress' a Developer can upload a file - Upload File Quest 1", async ({
+test("Dev 2 - When the task is in 'In Progress' a Developer can upload a file - Upload File Quest 1", async ({
   page,
 }) => {
   const {
@@ -241,12 +271,8 @@ test("When the task is in 'In Progress' a Developer can upload a file - Upload F
     logoutLink,
     devProfileLink,
     devQuestDashboardLink,
-    viewDetailsLink,
-    detailsLink,
     viewAllQuestsLink,
-    acceptQuestButton,
     inProgressButton,
-    reviewButton,
     uploadFileButton,
     uploadButton,
   } = devQuestElements(page);
@@ -257,9 +283,6 @@ test("When the task is in 'In Progress' a Developer can upload a file - Upload F
   const googleButton = page.getByRole("button", {
     name: /Continue with google/i,
   });
-
-  // Locate the file input
-  const fileInput = page.locator('input[type="file"]');
 
   // 🏠 Navigate to homepage
   await page.goto("/");
@@ -272,10 +295,10 @@ test("When the task is in 'In Progress' a Developer can upload a file - Upload F
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testDevUserEmail1);
+  await page.getByLabel("Email or phone").fill(testDevUserEmail2);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testDevUserPassword1);
+  await page.getByLabel("Enter your password").fill(testDevUserPassword2);
   await page.getByRole("button", { name: "Next" }).click();
 
   // 1. Expect the UI to reflect Client login
@@ -307,7 +330,7 @@ test("When the task is in 'In Progress' a Developer can upload a file - Upload F
   await expect(loginLink).toBeVisible();
 });
 
-test("When the task is in 'Review' a Developer can upload a file", async ({
+test("Dev 2 - When the task is in 'Review' a Developer can upload a file", async ({
   page,
 }) => {
   const {
@@ -315,11 +338,7 @@ test("When the task is in 'Review' a Developer can upload a file", async ({
     logoutLink,
     devProfileLink,
     devQuestDashboardLink,
-    viewDetailsLink,
-    detailsLink,
     viewAllQuestsLink,
-    acceptQuestButton,
-    inProgressButton,
     reviewButton,
     uploadFileButton,
     uploadButton,
@@ -346,10 +365,10 @@ test("When the task is in 'Review' a Developer can upload a file", async ({
   await googleButton.click();
 
   // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testDevUserEmail1);
+  await page.getByLabel("Email or phone").fill(testDevUserEmail2);
   await page.getByRole("button", { name: "Next" }).click();
 
-  await page.getByLabel("Enter your password").fill(testDevUserPassword1);
+  await page.getByLabel("Enter your password").fill(testDevUserPassword2);
   await page.getByRole("button", { name: "Next" }).click();
 
   // 1. Expect the UI to reflect Client login
@@ -380,7 +399,7 @@ test("When the task is in 'Review' a Developer can upload a file", async ({
   await expect(loginLink).toBeVisible();
 });
 
-test("Client is able to download a file uploaded by the dev for a task in 'In Progress'", async ({
+test("Client 2 - Client is able to download a file uploaded by the dev for a task in 'In Progress'", async ({
   page,
 }) => {
   const {
@@ -388,10 +407,7 @@ test("Client is able to download a file uploaded by the dev for a task in 'In Pr
     logoutLink,
     clientQuestDashboardLink,
     clientProfileLink,
-    createAQuestLink,
-    createQuestButton,
     viewAllQuestsLink,
-    viewAllPublicQuestsLink,
     viewDetailsLink,
     clientInProgressButton,
     downloadButton,
@@ -447,7 +463,7 @@ test("Client is able to download a file uploaded by the dev for a task in 'In Pr
   await download.saveAs(`downloads/${suggestedFilename}`);
 });
 
-test("Client is able to download a file uploaded by the dev for a task in 'Review'", async ({
+test("Client 2 - Client is able to download a file uploaded by the dev for a task in 'Review'", async ({
   page,
 }) => {
   const {
@@ -455,13 +471,11 @@ test("Client is able to download a file uploaded by the dev for a task in 'Revie
     logoutLink,
     clientQuestDashboardLink,
     clientProfileLink,
-    createAQuestLink,
-    createQuestButton,
     viewAllQuestsLink,
-    viewAllPublicQuestsLink,
     viewDetailsLink,
     clientReviewButton,
     downloadButton,
+    moveToCompletedButton,
   } = clientQuestElements(page);
 
   const h1 = page.locator("h1");
@@ -510,9 +524,18 @@ test("Client is able to download a file uploaded by the dev for a task in 'Revie
 
   const suggestedFilename = download.suggestedFilename();
   await download.saveAs(`downloads/${suggestedFilename}`);
+
+  await clientQuestDashboardLink.click();
+  await expect(h1).toHaveText("Client Quest Dashboard");
+  await clientReviewButton.click();
+  await expect(h1).toHaveText("Review");
+  await expect(h2).toHaveText("Upload File Quest 2");
+  await moveToCompletedButton.click();
 });
 
-test("Client deletes created quests", async ({ page }) => {
+test("Client 2 - can only delete Open or Completed Quests", async ({
+  page,
+}) => {
   const {
     loginLink,
     logoutLink,

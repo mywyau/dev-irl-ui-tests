@@ -178,8 +178,6 @@ test("Dev 2 - user logs in with Google, is able to accept some quests and move i
     logoutLink,
     devProfileLink,
     devQuestDashboardLink,
-    viewDetailsLink,
-    detailsLink,
     viewAllQuestsLink,
     acceptQuestButton,
     notStartedButton,
@@ -243,11 +241,8 @@ test("Dev 2 - user logs in with Google, is able to accept some quests and move i
 
   await expect(page.locator("h2").nth(0)).toHaveText("Upload File Quest 2");
   await expect(page.locator("h2").nth(1)).toHaveText("Upload File Quest 1");
-  // await page.locator("h2").nth(0).click();
   await moveToInProgressButton.nth(0).click();
   await moveToInProgressButton.nth(1).click();
-
-  // await page.pause();
 
   await devQuestDashboardLink.click();
   await expect(h1).toHaveText("Dev Quest Dashboard");
@@ -276,12 +271,8 @@ test("Dev 2 - When the task is in 'In Progress' a Developer can upload a file - 
     logoutLink,
     devProfileLink,
     devQuestDashboardLink,
-    viewDetailsLink,
-    detailsLink,
     viewAllQuestsLink,
-    acceptQuestButton,
     inProgressButton,
-    reviewButton,
     uploadFileButton,
     uploadButton,
   } = devQuestElements(page);
@@ -292,9 +283,6 @@ test("Dev 2 - When the task is in 'In Progress' a Developer can upload a file - 
   const googleButton = page.getByRole("button", {
     name: /Continue with google/i,
   });
-
-  // Locate the file input
-  const fileInput = page.locator('input[type="file"]');
 
   // 🏠 Navigate to homepage
   await page.goto("/");

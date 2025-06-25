@@ -1,22 +1,24 @@
-import { expect, test } from "@playwright/test";
-
 import {
   testClientUserEmail1,
   testClientUserPassword1,
 } from "@/configuration/Appconfig";
+import {
+  questPageHeadings,
+  testQuests,
+} from "@/constants/CreateQuestsConstants";
+import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
+import { expect, test } from "@playwright/test";
 
-import { clientQuestElements } from "@/pages/ClientQuestPage";
+import { createQuest } from "@/helpers/CreateQuestsHelper";
+import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
 
-test("Client user logs in with Google, is able to create multiple quests", async ({
-  page,
-}) => {
+test("Client user logs in and creates multiple quests", async ({ page }) => {
   const {
     loginLink,
     logoutLink,
     clientQuestDashboardLink,
     clientProfileLink,
     createAQuestLink,
-    createQuestButton,
     viewAllQuestsLink,
     viewAllPublicQuestsLink,
   } = clientQuestElements(page);
@@ -26,131 +28,52 @@ test("Client user logs in with Google, is able to create multiple quests", async
   // 🏠 Navigate to homepage
   await page.goto("/");
 
-  // 👉 Auth0 / Google login flow
+  // 🔐 Auth0 + Google login
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  const googleButton = page.getByRole("button", {
-    name: /continue with google/i,
-  });
-  await expect(googleButton).toBeVisible();
-  await googleButton.click();
+  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
 
-  // 📧 Gmail login
-  await page.getByLabel("Email or phone").fill(testClientUserEmail1);
-  await page.getByRole("button", { name: "Next" }).click();
-
-  await page.getByLabel("Enter your password").fill(testClientUserPassword1);
-  await page.getByRole("button", { name: "Next" }).click();
-
-  // ✅ Expect the UI to reflect Client login
+  // ✅ Client UI loaded
   await expect(logoutLink).toBeVisible();
   await expect(viewAllQuestsLink).toBeVisible();
   await expect(clientQuestDashboardLink).toBeVisible();
   await expect(clientProfileLink).toBeVisible();
 
+  // ➕ Create quests
   await clientQuestDashboardLink.click();
   await createAQuestLink.click();
+  await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
-  await page.waitForTimeout(250);
-  await expect(h1).toHaveText("Create a New Quest");
+  await createQuest(
+    page,
+    testQuests.title1,
+    testQuests.description1,
+    testQuests.criteria1,
+    testQuests.rank1
+  );
 
-  // 1) Open the dropdown:
-  const trigger = page.locator("#rank-select");
-  await expect(trigger).toBeVisible();
-  await page.waitForTimeout(500);
-  await trigger.click();
+  await createQuest(
+    page,
+    testQuests.title2,
+    testQuests.description2,
+    testQuests.criteria2,
+    testQuests.rank2
+  );
 
-  // 2) Click Mithril"
-  // Wait for dropdown panel to appear
-  // Ensure it's visible before clicking
-  await page.locator('div[role="option"]', { hasText: "Mithril" }).click();
-  await page.waitForTimeout(1000);
+  await createQuest(
+    page,
+    testQuests.title3,
+    testQuests.description3,
+    testQuests.criteria3,
+    testQuests.rank3
+  );
 
-  await page.locator("#language-tag-selector").fill("Python");
-  await page.locator("#language-opt-python").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#language-tag-selector", "Scala");
-  await page.locator("#language-opt-scala").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#language-tag-selector", "TypeScript");
-  await page.locator("#language-opt-typescript").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#quest-title", "Quest 1");
-  await page.fill("#quest-description", "Some description for quest 1");
-  await page.fill("#acceptance-criteria", "Some acceptance criteria");
-  await page.waitForTimeout(500);
-  await createQuestButton.click();
-
-  await page.waitForTimeout(500);
-
-  // 1) Open the dropdown:
-  await expect(trigger).toBeVisible();
-  await page.waitForTimeout(500);
-  await trigger.click();
-
-  // 2) Click Demon"
-  // Wait for dropdown panel to appear
-  // Ensure it's visible before clicking
-  await page.locator('div[role="option"]', { hasText: "Demon" }).click();
-  await page.waitForTimeout(1000);
-
-  await page.locator("#language-tag-selector").fill("Python");
-  await page.locator("#language-opt-python").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#language-tag-selector", "Scala");
-  await page.locator("#language-opt-scala").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#language-tag-selector", "TypeScript");
-  await page.locator("#language-opt-typescript").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#quest-title", "Quest 2");
-  await page.fill("#quest-description", "Some description for quest 2");
-  await page.fill("#acceptance-criteria", "Some acceptance criteria 2");
-  await page.waitForTimeout(500);
-  await createQuestButton.click();
-
-  await page.waitForTimeout(500);
-
-  // 1) Open the dropdown:
-  await expect(trigger).toBeVisible();
-  await page.waitForTimeout(500);
-  await trigger.click();
-
-  // 2) Click Aether"
-  // Wait for dropdown panel to appear
-  // Ensure it's visible before clicking
-  await page.locator('div[role="option"]', { hasText: "Aether" }).click();
-  await page.waitForTimeout(1000);
-
-  await page.locator("#language-tag-selector").fill("Python");
-  await page.locator("#language-opt-python").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#language-tag-selector", "Scala");
-  await page.locator("#language-opt-scala").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#language-tag-selector", "TypeScript");
-  await page.locator("#language-opt-typescript").click();
-  await page.locator("#language-tag-selector").clear();
-
-  await page.fill("#quest-title", "Quest 3");
-  await page.fill("#quest-description", "Some description for quest 3");
-  await page.fill("#acceptance-criteria", "Some acceptance criteria 3");
-  await page.waitForTimeout(500);
-  await createQuestButton.click();
-
-  await page.waitForTimeout(500);
-
+  // 🔍 View all public quests
   await viewAllPublicQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
+  await expect(h1).toHaveText(questPageHeadings.allAvailableOpenQuests);
+
+  // 🚪 Logout
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
 });

@@ -9,10 +9,16 @@
     "skipLibCheck": true,
     "types": ["@playwright/test"],
     "outDir": "dist",
-    "baseUrl": ".",                         
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]                        
+      "@/*": ["./*"]
     }
   },
-  "include": ["tests", "playwright.config.ts", "pages"]
+  "include": [
+    "constants",
+    "helpers",  
+    "playwright.config.ts",
+    "selectors", 
+    "tests",
+    ]
 }

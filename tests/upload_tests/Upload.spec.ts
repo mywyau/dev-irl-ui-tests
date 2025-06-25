@@ -1,6 +1,3 @@
-// These tests bleed into each other i.e. they sequentially set next test up with data creation, edits etc.
-// Note to self do not let tests/app/data state bleed from one spec to another. As a necessary evil keep within the same spec.
-
 import { expect, test } from "@playwright/test";
 
 import {
@@ -10,9 +7,9 @@ import {
   testDevUserPassword2,
 } from "@/configuration/Appconfig";
 
-import { devQuestElements } from "@/pages/DevQuestPage";
+import { devQuestElements } from "@/selectors/DevQuestSelectors";
 
-import { clientQuestElements } from "@/pages/ClientQuestPage";
+import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
 import fs from "fs-extra";
 import path from "path";
 

@@ -174,7 +174,8 @@ test("Client can edit a previously created quest", async ({ page }) => {
 
   // +++++++++++ Client Logout Flow +++++++++++
   await logoutLink.click();
-  await logoutLink.click();
+  // await logoutLink.click();
+  await page.waitForTimeout(500);
   await expect(loginLink).toBeVisible();
 });
 

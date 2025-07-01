@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-npx playwright test tests/all_tests
+# These tests need to run sequentially
+npx playwright test tests/all_tests --workers=1

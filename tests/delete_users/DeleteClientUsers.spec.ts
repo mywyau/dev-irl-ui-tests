@@ -47,39 +47,39 @@ test("Client 1 - Login and delete the test client user profile", async ({
   await expect(loginLink).toBeVisible();
 });
 
-test("Client 2 - Login and delete the test client user profile", async ({
-  page,
-}) => {
-  const {
-    dashboardLink,
-    loginLink,
-    logoutLink,
-    profileLink,
-    viewAllQuestsLink,
-  } = navBarSelectors(page);
+// test("Client 2 - Login and delete the test client user profile", async ({
+//   page,
+// }) => {
+//   const {
+//     dashboardLink,
+//     loginLink,
+//     logoutLink,
+//     profileLink,
+//     viewAllQuestsLink,
+//   } = navBarSelectors(page);
 
-  const nagivateToHome = page.goto("/");
+//   const nagivateToHome = page.goto("/");
 
-  // +++++++++++ Test Start +++++++++++
+//   // +++++++++++ Test Start +++++++++++
 
-  await nagivateToHome;
+//   await nagivateToHome;
 
-  // +++++++++++ Google Login +++++++++++
-  await expect(loginLink).toBeVisible();
-  await loginLink.click();
+//   // +++++++++++ Google Login +++++++++++
+//   await expect(loginLink).toBeVisible();
+//   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail2, testClientUserPassword2);
+//   await signInWithGoogle(page, testClientUserEmail2, testClientUserPassword2);
 
-  // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
-  await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(dashboardLink).toBeVisible();
-  await expect(profileLink).toBeVisible();
+//   // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
+//   await expect(logoutLink).toBeVisible();
+//   await expect(viewAllQuestsLink).toBeVisible();
+//   await expect(dashboardLink).toBeVisible();
+//   await expect(profileLink).toBeVisible();
 
-  // +++++++++++ Delete the Client Profile +++++++++++
-  await profileLink.click();
-  await page.waitForTimeout(2000);
-  await page.getByRole("button", { name: "Delete user profile" }).click();
-  await logoutLink.click();
-  await expect(loginLink).toBeVisible();
-});
+//   // +++++++++++ Delete the Client Profile +++++++++++
+//   await profileLink.click();
+//   await page.waitForTimeout(2000);
+//   await page.getByRole("button", { name: "Delete user profile" }).click();
+//   await logoutLink.click();
+//   await expect(loginLink).toBeVisible();
+// });

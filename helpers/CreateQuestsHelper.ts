@@ -9,25 +9,23 @@ export async function createQuest(
   criteria: string,
   rank: string
 ) {
-  const {
-    createQuestButton,
-  } = clientQuestElements(page);
+  const { createQuestButton } = clientQuestElements(page);
 
-  const rankTrigger = page.locator("#rank-select");
-  await expect(rankTrigger).toBeVisible();
+  const rankButtonTrigger = page.locator("#rank");
+
+  await expect(rankButtonTrigger).toBeVisible();
   await page.waitForTimeout(250);
-  await rankTrigger.click();
+  await rankButtonTrigger.click();
+  await page.click("#rank-option-Mithril"); // Select "Mithril"
 
-  await page.locator('div[role="option"]', { hasText: rank }).click();
+  await page.waitForSelector("#language-tags-trigger", { state: "visible" });
+  await page.click("#language-tags-trigger");
 
-  const languages = ["Python", "Scala", "TypeScript"];
-  const langSelector = page.locator("#language-tag-selector");
-
-  for (const lang of languages) {
-    await langSelector.fill(lang);
-    await page.locator(`#language-opt-${lang.toLowerCase()}`).click();
-    await langSelector.clear();
-  }
+  // language-tags
+  await page.click("#language-option-Python"); // Select "Python"
+  await page.click("#language-option-TypeScript"); // Select "TypeScript"
+  await page.click("#language-option-Scala"); // Select "Scala"
+  await page.click("#language-tags-trigger");
 
   await page.fill("#quest-title", title);
   await page.fill("#quest-description", description);

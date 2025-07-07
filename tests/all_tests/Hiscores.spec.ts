@@ -23,7 +23,7 @@ test("Client user logs in with Google, is able to view Hiscores", async ({
   await expect(hiscoresLink).toBeVisible();
   await hiscoresLink.click();
 
-  await expect(h1).toHaveText("Hiscores");
+  await expect(h1).toHaveText("Total Level");
 
   await expect(loginLink).toBeVisible();
 });

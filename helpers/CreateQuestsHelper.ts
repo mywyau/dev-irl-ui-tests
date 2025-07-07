@@ -22,9 +22,19 @@ export async function createQuest(
   await page.click("#language-tags-trigger");
 
   // language-tags
-  await page.click("#language-option-Python"); // Select "Python"
-  await page.click("#language-option-TypeScript"); // Select "TypeScript"
-  await page.click("#language-option-Scala"); // Select "Scala"
+  // await page.waitForSelector("#language-option-Python", { state: "visible" });
+  // await page.click("#language-option-Python"); // Select "Python"
+  // await page.waitForTimeout(200);
+  // await page.waitForSelector("#language-option-Scala", { state: "visible" });
+  // await page.click("#language-option-Scala"); // Select "Scala"
+  // await page.waitForTimeout(200);
+  // await page.waitForSelector("#language-option-Rust", { state: "visible" });
+  // await page.click("#language-option-Rust"); // Select "Rust"
+  // await page.waitForTimeout(200);
+  
+  await page.locator('[id^="language-option-"]', { hasText: "Python" }).click();
+  await page.locator('[id^="language-option-"]', { hasText: "Scala" }).click();
+  await page.locator('[id^="language-option-"]', { hasText: "Rust" }).click();
   await page.click("#language-tags-trigger");
 
   await page.fill("#quest-title", title);

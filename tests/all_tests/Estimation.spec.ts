@@ -99,12 +99,6 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
 test("Dev user logs in with Google, is able to add an estiation to these quests", async ({
   page,
 }) => {
-  const {
-    addRewardButton,
-    timeRewardInput,
-    completionRewardInput,
-    addCompletionRewardButton,
-  } = rewardElements(page);
 
   const {
     loginLink,
@@ -112,16 +106,7 @@ test("Dev user logs in with Google, is able to add an estiation to these quests"
     devProfileLink,
     estimationsLink,
     submitEstimatesButton,
-    devQuestDashboardLink,
-    viewDetailsLink,
-    detailsLink,
     viewAllQuestsLink,
-    acceptQuestButton,
-    notStartedButton,
-    inProgressButton,
-    reviewButton,
-    moveToInProgressButton,
-    moveToReviewButton,
   } = devQuestElements(page);
 
   const h1 = page.locator("h1");
@@ -147,7 +132,7 @@ test("Dev user logs in with Google, is able to add an estiation to these quests"
   // +++++++++++ Dev is able to add an estimation to a quest +++++++++++
   await viewAllQuestsLink.click();
   await expect(h1).toHaveText("All Available Open Quests");
-  await estimationsLink.click();
+  await estimationsLink.nth(0).click();
   await expect(h1).toHaveText("Estimate Difficulty");
   await page.fill("#difficulty-score", "50");
   await page.fill("#number-of-day", "8");

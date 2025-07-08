@@ -10,7 +10,7 @@ export const devQuestElements = (page: Page) => ({
   createQuestLink: page.getByRole("link", { name: " Create Quest " }),
   devProfileLink: page.getByRole("link", { name: "Profile" }),
   estimationsLink: page.getByRole("link", { name: "Estimations" }),
-  submitEstimatesButton: page.getByRole("button", { name: "Submit Estimatate" }),
+  submitEstimatesButton: page.getByRole("button", { name: "Submit Estimate" }),
   viewAllPublicQuestsLink: page.getByRole("link", { name: "View all quests" }),
   createAQuestLink: page.getByRole("link", { name: "Create a quest" }),
 

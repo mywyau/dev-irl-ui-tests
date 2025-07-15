@@ -1,4 +1,3 @@
-
 import { expect, test } from "@playwright/test";
 
 import {
@@ -53,8 +52,17 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await expect(clientQuestDashboardLink).toBeVisible();
   await expect(clientProfileLink).toBeVisible();
 
+  // Navigate to Create quests via context menu dropdown
   await clientQuestDashboardLink.click();
-  await createAQuestLink.click();
+
+  const card = page.getByText("Quest Dashboard").locator("..").locator("..");
+  await page.waitForTimeout(250);
+
+  await card.click({ button: "right" });
+  await page.waitForTimeout(250);
+
+  const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
+  await createMenuItem.click();
 
   // +++++++++++ Quest creation +++++++++++
 
@@ -98,7 +106,6 @@ test("Client user logs in with Google, is able to create multiple quests", async
 });
 
 test("Client can edit a previously created quest", async ({ page }) => {
-
   const { h1 } = simpleSelectors(page);
 
   const {
@@ -134,17 +141,37 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await expect(clientProfileLink).toBeVisible();
 
   // +++++++++++ Client Edits Quest Flow +++++++++++
-
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
-  await viewMyQuestsLink.click();
+
+  const card = page.getByText("Quest Dashboard").locator("..").locator("..");
+  await page.waitForTimeout(250);
+
+  await card.click({ button: "right" });
+  await page.waitForTimeout(250);
+
+  const viewMyQuestsMenuItem = page.getByRole("menuitem", {
+    name: "View My Quests",
+  });
+  await viewMyQuestsMenuItem.click();
   await expect(h1).toHaveText("My Quests");
+
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
+
   await expect(page.locator("#quest-title")).toHaveText("Quest 3");
   await page.waitForTimeout(250);
 
-  await editQuestButton.click();
+  // await editQuestButton.click();
+
+  const questCard = page.getByText("Quest 3").locator("..").locator("..");
+  const editQuestMenuItem = page.getByRole("menuitem", {
+    name: "Edit Quest",
+  });
+
+  await questCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+  await editQuestMenuItem.click();  
 
   await page.waitForTimeout(250);
   await expect(h1).toHaveText("Edit Quest");
@@ -163,11 +190,17 @@ test("Client can edit a previously created quest", async ({ page }) => {
     "#quest-description",
     "Some updated description for quest 3 to make it harder"
   );
+  
   await updateQuestButton.click();
 
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
-  await viewMyQuestsLink.click();
+
+  await card.click({ button: "right" });
+  await page.waitForTimeout(250);
+
+  await viewMyQuestsMenuItem.click();
+
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
@@ -175,7 +208,6 @@ test("Client can edit a previously created quest", async ({ page }) => {
 
   // +++++++++++ Client Logout Flow +++++++++++
   await logoutLink.click();
-  // await logoutLink.click();
   await page.waitForTimeout(500);
   await expect(loginLink).toBeVisible();
 });
@@ -183,7 +215,6 @@ test("Client can edit a previously created quest", async ({ page }) => {
 test("Dev user logs in with Google, is able to accept some quests and move it from NotStarted -> InProgress -> Review", async ({
   page,
 }) => {
-  
   const {
     loginLink,
     logoutLink,

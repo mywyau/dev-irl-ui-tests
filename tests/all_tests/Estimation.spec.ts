@@ -17,7 +17,6 @@ import {
 import { createQuest } from "@/helpers/CreateQuestsHelper";
 import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
 import { deleteQuests } from "@/helpers/QuestHelper";
-import { rewardElements } from "@/selectors/RewardSelectors";
 import { devQuestElements } from "@/selectors/DevQuestSelectors";
 
 test("Client 1 user logs in with Google, is able to create multiple quests", async ({
@@ -52,8 +51,17 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   await expect(clientQuestDashboardLink).toBeVisible();
   await expect(clientProfileLink).toBeVisible();
 
+  // Navigate to Create quests via context menu dropdown
   await clientQuestDashboardLink.click();
-  await createAQuestLink.click();
+
+  const card = page.getByText("Quest Dashboard").locator("..").locator("..");
+  await page.waitForTimeout(250);
+
+  await card.click({ button: "right" });
+  await page.waitForTimeout(250);
+
+  const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
+  await createMenuItem.click();
 
   // +++++++++++ Quest creation +++++++++++
 
@@ -99,7 +107,6 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
 test("Dev user logs in with Google, is able to add an estiation to these quests", async ({
   page,
 }) => {
-
   const {
     loginLink,
     logoutLink,
@@ -136,8 +143,10 @@ test("Dev user logs in with Google, is able to add an estiation to these quests"
   await expect(h1).toHaveText("Estimate Difficulty");
   await page.fill("#difficulty-score", "50");
   await page.fill("#number-of-day", "8");
-  await page.fill("#comment", "8");
+  await page.fill("#comment", "some comment about it being roughly mid difficulty");
   await submitEstimatesButton.click();
+
+  await page.getByRole("button", { name: "Yes, submit" }).click();
 
   // +++++++++++ Client Logs out +++++++++++
   await logoutLink.click();

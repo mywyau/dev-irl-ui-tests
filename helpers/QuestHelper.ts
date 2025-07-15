@@ -14,11 +14,33 @@ export async function deleteQuests(page: Page, questTitle: string) {
 
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
-  await viewMyQuestsLink.click();
+
+  const card = page.getByText("Quest Dashboard").locator("..").locator("..");
+  await page.waitForTimeout(200);
+
+  await card.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const viewMyQuestsMenuItem = page.getByRole("menuitem", {
+    name: "View My Quests",
+  });
+  await viewMyQuestsMenuItem.click();
+
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
   await expect(page.locator("#quest-title")).toHaveText(questTitle);
-  await page.waitForTimeout(250);
-  await deleteQuestButton.click();
+  await page.waitForTimeout(200);
+
+  const questCard = page.getByText(questTitle).locator("..").locator("..");
+  const deleteQuestMenuItem = page.getByRole("menuitem", {
+    name: "Delete Quest",
+  });
+
+  await questCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+  await deleteQuestMenuItem.click();  
+  await page.getByRole("button", { name: "Confirm" }).click();
+
+
 }

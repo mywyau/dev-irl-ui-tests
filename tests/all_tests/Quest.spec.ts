@@ -90,7 +90,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
   // // +++++++++++ Final Validation and Logout +++++++++++
 
   await viewAllPublicQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
+  await expect(h1).toHaveText("All Available Quests");
 
   await logoutLink.click();
   await page.waitForTimeout(500);
@@ -224,7 +224,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
 
   // +++++++++++ Dev accepts a quest and moves it along to Review +++++++++++
   await viewAllQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
+  await expect(h1).toHaveText("All Available Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
   await acceptQuestButton.click();

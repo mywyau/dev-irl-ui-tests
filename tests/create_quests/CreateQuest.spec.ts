@@ -40,9 +40,18 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
   await expect(clientQuestDashboardLink).toBeVisible();
   await expect(clientProfileLink).toBeVisible();
 
-  // ➕ Create quests
+  // Navigate to Create quests via context menu dropdown
   await clientQuestDashboardLink.click();
-  await createAQuestLink.click();
+
+  const card = page.getByText("Quest Dashboard").locator("..").locator("..");
+  await page.waitForTimeout(250);
+
+  await card.click({ button: "right" });
+  await page.waitForTimeout(250);
+
+  const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
+  await createMenuItem.click();
+  
   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
   await createQuest(

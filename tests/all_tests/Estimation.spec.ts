@@ -89,7 +89,7 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   // // +++++++++++ Final Validation and Logout +++++++++++
 
   await viewAllPublicQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
+  await expect(h1).toHaveText("All Available Quests");
 
   await logoutLink.click();
   await page.waitForTimeout(500);
@@ -131,7 +131,7 @@ test("Dev user logs in with Google, is able to add an estiation to these quests"
 
   // +++++++++++ Dev is able to add an estimation to a quest +++++++++++
   await viewAllQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
+  await expect(h1).toHaveText("All Available Quests");
   await estimationsLink.nth(0).click();
   await expect(h1).toHaveText("Estimate Difficulty");
   await page.fill("#difficulty-score", "50");

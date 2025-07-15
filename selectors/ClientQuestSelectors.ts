@@ -7,9 +7,8 @@ export const clientQuestElements = (page: Page) => ({
   viewAllQuestsLink: page.getByRole("link", { name: "View all quests" }),
   viewDetailsLink: page.getByRole("link", { name: "View Details" }),
   viewMyQuestsLink: page.getByRole("link", { name: "View my quests" }),
-  clientQuestDashboardLink: page.getByRole("link", {
-    name: " Dashboard",
-  }),
+  clientQuestDashboardLink: page.getByRole("link", { name: " Dashboard" }),
+  // questDropdownContextMenu: page.getByRole("link", { name: " Dashboard" }),
   createQuestButton: page.getByRole("button", { name: "Create Quest" }),
   clientProfileLink: page.getByRole("link", { name: "Profile" }),
   deleteQuestButton: page.getByRole("button", { name: "Delete quest" }),

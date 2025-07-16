@@ -468,13 +468,9 @@ test("Dev 1, is able to accept some quests and move it from NotStarted -> InProg
     logoutLink,
     devProfileLink,
     devQuestDashboardLink,
-    viewDetailsLink,
     detailsLink,
     viewAllQuestsLink,
     acceptQuestButton,
-    notStartedButton,
-    inProgressButton,
-    reviewButton,
     moveToInProgressButton,
     moveToReviewButton,
   } = devQuestElements(page);
@@ -624,7 +620,7 @@ test("Client 1 - is able to move a quest in Review to Completed", async ({
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
   await page.waitForTimeout(200);
-  
+
   await questDashboardCard.click({ button: "right" });
   await page.waitForTimeout(200);
 

@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
 
 export const navBarSelectors = (page: Page) => ({
-  dashboardLink: page.getByRole("link", { name: " Dashboard" }),
+  dashboardLink: page.getByRole("link", { name: "Dashboard" }),
   detailsLink: page.getByRole("link", { name: "Details" }),
   hiscoresLink: page.getByRole("link", { name: "Hiscores" }),
   loginLink: page.getByRole("link", { name: "Login" }),

@@ -35,5 +35,5 @@ export const uploadFileTestQuests = {
 
 export const questPageHeadings = {
   createANewQuest: "Create a New Quest",
-  allAvailableOpenQuests: "All Available Open Quests",
+  allAvailableOpenQuests: "All Available Quests",
 };

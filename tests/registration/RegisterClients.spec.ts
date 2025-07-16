@@ -1,23 +1,25 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  testClientUserEmail1,
-  testClientUserEmail2,
-  testClientUserPassword1,
-  testClientUserPassword2,
+  clientEmail1,
+  clientEmail2,
+  clientEmail3,
+  clientEmail4,
+  clientPassword1,
+  clientPassword2,
+  clientPassword3,
+  clientPassword4,
 } from "@/configuration/Appconfig";
-import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
-import { buttonSelectors } from "@/selectors/ButtonSelectors";
+
+import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
+import { registerUser, validateHeroBar } from "@/helpers/RegistrationHelper"
 import { navBarSelectors } from "@/selectors/NavBarSelectors";
 
-test("Client 1 user logs in with Google, is able to complete registration", async ({
+test("Client 1 - user logs in with Auth0 and able to complete registration", async ({
   page,
 }) => {
-  const { continueButton } = buttonSelectors(page);
-
   const {
     dashboardLink,
-    hiscoresLink,
     loginLink,
     logoutLink,
     profileLink,
@@ -34,110 +36,154 @@ test("Client 1 user logs in with Google, is able to complete registration", asyn
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
-  // +++++++++++ Expect the UI to reflect Client UI +++++++++++
-  await expect(hiscoresLink).toBeVisible();
-  await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
-
+  // +++++++++++ Expect the UI to reflect NOT FULLY Registered Client UI +++++++++++
+  await validateHeroBar(page);
   await page.waitForTimeout(1000);
 
-  // 1) Fill in the username
-  await page.locator("#username").fill("goku");
+  // +++++++++++ Register the user +++++++++++
+  await registerUser(page, "goku", "bob", "smith", "Client");
 
-  // 2) Open the dropdown:
-  const trigger = page.locator('[data-testid="role-select-trigger"]');
-  await expect(trigger).toBeVisible();
-  await page.waitForTimeout(250);
-  await trigger.click();
-
-  // 3) Wait for the dropdown panel to show up
-  const content = page.locator(
-    '[data-testid="role-select-content"][data-state="open"]'
-  );
-  await expect(content).toBeVisible();
-
-  // 4) Click “Client”
-  const clientOption = page.locator('[data-testid="role-select-item-Client"]');
-  await expect(clientOption).toBeVisible();
-  await clientOption.click();
-
-  // 5) Finally click the “Continue” button
-  await expect(continueButton).toBeEnabled();
-  await continueButton.click();
+  // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
 
   await expect(viewAllQuestsLink).toBeVisible();
   await expect(dashboardLink).toBeVisible();
   await expect(profileLink).toBeVisible();
 
   await profileLink.click();
+
+  // +++++++++++ Logout +++++++++++
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
 });
 
-// test("Client 2 user logs in with Google, is able to complete registration", async ({
-//   page,
-// }) => {
-//   const { continueButton } = buttonSelectors(page);
+test("Client 2 - user logs in via Auth0 and is able to complete registration", async ({
+  page,
+}) => {
+  const {
+    dashboardLink,
+    loginLink,
+    logoutLink,
+    profileLink,
+    viewAllQuestsLink,
+  } = navBarSelectors(page);
 
-//   const {
-//     dashboardLink,
-//     hiscoresLink,
-//     loginLink,
-//     logoutLink,
-//     profileLink,
-//     viewAllQuestsLink,
-//   } = navBarSelectors(page);
+  const nagivateToHome = page.goto("/");
 
-//   const nagivateToHome = page.goto("/");
+  // +++++++++++ Test Start +++++++++++
 
-//   // +++++++++++ Test Start +++++++++++
+  await nagivateToHome;
 
-//   await nagivateToHome;
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
 
-//   // +++++++++++ Google Login +++++++++++
-//   await expect(loginLink).toBeVisible();
-//   await loginLink.click();
+  await signInAuth0(page, clientEmail2, clientPassword2);
 
-//   await signInWithGoogle(page, testClientUserEmail2, testClientUserPassword2);
+  // +++++++++++ Expect the UI to reflect NOT FULLY Registered Client UI +++++++++++
+  await validateHeroBar(page);
+  await page.waitForTimeout(1000);
 
-//   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
-//   await expect(hiscoresLink).toBeVisible();
-//   await expect(logoutLink).toBeVisible();
-//   await expect(viewAllQuestsLink).toBeVisible();
+  // +++++++++++ Register the user +++++++++++
+  await registerUser(page, "goku2", "bob2", "smith2", "Client");
 
-//   await page.waitForTimeout(1000);
+  // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
 
-//   // 1) Fill in the username
-//   await page.locator("#username").fill("yugi");
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(dashboardLink).toBeVisible();
+  await expect(profileLink).toBeVisible();
 
-//   // 2) Open the dropdown:
-//   const trigger = page.locator('[data-testid="role-select-trigger"]');
-//   await expect(trigger).toBeVisible();
-//   await page.waitForTimeout(250);
-//   await trigger.click();
+  await profileLink.click();
 
-//   // 3) Wait for the dropdown panel to show up
-//   const content = page.locator(
-//     '[data-testid="role-select-content"][data-state="open"]'
-//   );
-//   await expect(content).toBeVisible();
+  // +++++++++++ Logout +++++++++++
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});
 
-//   // 4) Click “Client”
-//   const clientOption = page.locator('[data-testid="role-select-item-Client"]');
-//   await expect(clientOption).toBeVisible();
-//   await clientOption.click();
 
-//   // 5) Finally click the “Continue” button
-//   await expect(continueButton).toBeEnabled();
-//   await continueButton.click();
+test("Client 3 - user logs in via Auth0 and is able to complete registration", async ({
+  page,
+}) => {
+  const {
+    dashboardLink,
+    loginLink,
+    logoutLink,
+    profileLink,
+    viewAllQuestsLink,
+  } = navBarSelectors(page);
 
-//   await expect(viewAllQuestsLink).toBeVisible();
-//   await expect(dashboardLink).toBeVisible();
-//   await expect(profileLink).toBeVisible();
+  const nagivateToHome = page.goto("/");
 
-//   await profileLink.click();
-//   await logoutLink.click();
-//   await expect(loginLink).toBeVisible();
-// });
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, clientEmail3, clientPassword3);
+
+  // +++++++++++ Expect the UI to reflect NOT FULLY Registered Client UI +++++++++++
+  await validateHeroBar(page);
+  await page.waitForTimeout(1000);
+
+  // +++++++++++ Register the user +++++++++++
+  await registerUser(page, "goku3", "bob3", "smith3", "Client");
+
+  // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
+
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(dashboardLink).toBeVisible();
+  await expect(profileLink).toBeVisible();
+
+  await profileLink.click();
+
+  // +++++++++++ Logout +++++++++++
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});
+
+test("Client 4 - user logs in via Auth0 and is able to complete registration", async ({
+  page,
+}) => {
+  const {
+    dashboardLink,
+    loginLink,
+    logoutLink,
+    profileLink,
+    viewAllQuestsLink,
+  } = navBarSelectors(page);
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, clientEmail4, clientPassword4);
+
+  // +++++++++++ Expect the UI to reflect NOT FULLY Registered Client UI +++++++++++
+  await validateHeroBar(page);
+  await page.waitForTimeout(1000);
+
+  // +++++++++++ Register the user +++++++++++
+  await registerUser(page, "goku4", "bob4", "smith4", "Client");
+
+  // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
+
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(dashboardLink).toBeVisible();
+  await expect(profileLink).toBeVisible();
+
+  await profileLink.click();
+
+  // +++++++++++ Logout +++++++++++
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});

@@ -1,23 +1,25 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  testDevUserEmail1,
-  testDevUserEmail2,
-  testDevUserPassword1,
-  testDevUserPassword2,
+  devEmail1,
+  devEmail2,
+  devEmail3,
+  devEmail4,
+  devPassword1,
+  devPassword2,
+  devPassword3,
+  devPassword4,
 } from "@/configuration/Appconfig";
 
-import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
+import {
+  deleteUserViaProfilePage,
+  heroBarIsVisable,
+  signInAuth0,
+} from "@/helpers/NonSocialAuth0Helper";
 import { navBarSelectors } from "@/selectors/NavBarSelectors";
 
-test("Dev 1 - Delete dev profile", async ({ page }) => {
-  const {
-    dashboardLink,
-    loginLink,
-    logoutLink,
-    profileLink,
-    viewAllQuestsLink,
-  } = navBarSelectors(page);
+test("Dev 1 - Login and delete the test dev user profile", async ({ page }) => {
+  const { loginLink } = navBarSelectors(page);
 
   const nagivateToHome = page.goto("/");
 
@@ -29,53 +31,78 @@ test("Dev 1 - Delete dev profile", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testDevUserEmail1, testDevUserPassword1);
+  await signInAuth0(page, devEmail1, devPassword1);
 
   // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
-  await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(dashboardLink).toBeVisible();
-  await expect(profileLink).toBeVisible();
+  await heroBarIsVisable(page);
 
   // +++++++++++ Delete the Dev Profile +++++++++++
-  await profileLink.click();
-  await page.waitForTimeout(1000);
-  await page.getByRole("button", { name: "Delete user profile" }).click();
-  await logoutLink.click();
-  await expect(loginLink).toBeVisible();
+  await deleteUserViaProfilePage(page);
 });
 
-// test("Dev 2 - Delete dev profile", async ({ page }) => {
-//   const {
-//     dashboardLink,
-//     loginLink,
-//     logoutLink,
-//     profileLink,
-//     viewAllQuestsLink,
-//   } = navBarSelectors(page);
+test("Dev 2 - Login and delete the test dev user profile", async ({ page }) => {
+  const { loginLink } = navBarSelectors(page);
 
-//   const nagivateToHome = page.goto("/");
+  const nagivateToHome = page.goto("/");
 
-//   // +++++++++++ Test Start +++++++++++
+  // +++++++++++ Test Start +++++++++++
 
-//   await nagivateToHome;
+  await nagivateToHome;
 
-//   // +++++++++++ Google Login +++++++++++
-//   await expect(loginLink).toBeVisible();
-//   await loginLink.click();
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
 
-//   await signInWithGoogle(page, testDevUserEmail2, testDevUserPassword2);
+  await signInAuth0(page, devEmail2, devPassword2);
 
-//   // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
-//   await expect(logoutLink).toBeVisible();
-//   await expect(viewAllQuestsLink).toBeVisible();
-//   await expect(dashboardLink).toBeVisible();
-//   await expect(profileLink).toBeVisible();
+  // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
+  await heroBarIsVisable(page);
 
-//   // +++++++++++ Delete the Dev Profile +++++++++++
-//   await profileLink.click();
-//   await page.waitForTimeout(1000);
-//   await page.getByRole("button", { name: "Delete user profile" }).click();
-//   await logoutLink.click();
-//   await expect(loginLink).toBeVisible();
-// });
+  // +++++++++++ Delete the Dev Profile +++++++++++
+  await deleteUserViaProfilePage(page);
+});
+
+test("Dev 3 - Login and delete the test dev user profile", async ({ page }) => {
+  
+  const { loginLink } = navBarSelectors(page);
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, devEmail3, devPassword3);
+
+  // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
+  await heroBarIsVisable(page);
+
+  // +++++++++++ Delete the Dev Profile +++++++++++
+  await deleteUserViaProfilePage(page);
+});
+
+test("Dev 4 - Login and delete the test dev user profile", async ({ page }) => {
+  const { loginLink } = navBarSelectors(page);
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, devEmail4, devPassword4);
+
+  // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
+  await heroBarIsVisable(page);
+
+  // +++++++++++ Delete the Dev Profile +++++++++++
+  await deleteUserViaProfilePage(page);
+});

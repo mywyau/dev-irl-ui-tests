@@ -1,8 +1,8 @@
 import { expect, Locator, test } from "@playwright/test";
 
 import {
-  testClientUserEmail1,
-  testClientUserPassword1,
+  clientEmail1,
+  clientPassword1,
   testDevUserEmail1,
   testDevUserPassword1,
 } from "@/configuration/Appconfig";
@@ -45,7 +45,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -90,7 +90,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
   // // +++++++++++ Final Validation and Logout +++++++++++
 
   await viewAllPublicQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
+  await expect(h1).toHaveText("All Available Quests");
 
   await logoutLink.click();
   await page.waitForTimeout(500);
@@ -135,7 +135,7 @@ test("Dev 1 - user logs in with Google, is able to accept some quests and move i
 
   // 2. Accept two quests
   await viewAllQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
+  await expect(h1).toHaveText("All Available Quests");
 
   const detailsLinks = page.locator('[data-testid^="details-link-"]');
   await detailsLinks.nth(2).click(); // Clicks the second "Details" link
@@ -327,7 +327,7 @@ test("Client 1 - Client is able to download a file uploaded by the dev for a tas
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -384,7 +384,7 @@ test("Client 1 - Client is able to download a file uploaded by the dev for a tas
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -440,7 +440,7 @@ test("Client 1 - Moves the task in review to 'Completed'", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -501,7 +501,7 @@ test("Client 1 - can only delete Open or Completed Quests", async ({
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();

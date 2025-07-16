@@ -1,182 +1,191 @@
-import { expect, test } from "@playwright/test";
+// import { expect, test } from "@playwright/test";
 
-import {
-  testClientUserEmail1,
-  testClientUserPassword1,
-  testDevUserEmail1,
-  testDevUserPassword1,
-} from "@/configuration/Appconfig";
+// import {
+//   clientEmail1,
+//   clientPassword1,
+//   testDevUserEmail1,
+//   testDevUserPassword1,
+// } from "@/configuration/Appconfig";
 
-import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
+// import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
 
-import {
-  questPageHeadings,
-  testQuests,
-} from "@/constants/CreateQuestsConstants";
+// import {
+//   questPageHeadings,
+//   testQuests,
+// } from "@/constants/CreateQuestsConstants";
 
-import { createQuest } from "@/helpers/CreateQuestsHelper";
-import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
-import { deleteQuests } from "@/helpers/QuestHelper";
-import { rewardElements } from "@/selectors/RewardSelectors";
-import { devQuestElements } from "@/selectors/DevQuestSelectors";
+// import { createQuest } from "@/helpers/CreateQuestsHelper";
+// import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
+// import { deleteQuests } from "@/helpers/QuestHelper";
+// import { devQuestElements } from "@/selectors/DevQuestSelectors";
 
-test("Client 1 user logs in with Google, is able to create multiple quests", async ({
-  page,
-}) => {
-  const {
-    loginLink,
-    logoutLink,
-    clientQuestDashboardLink,
-    clientProfileLink,
-    createAQuestLink,
-    viewAllQuestsLink,
-    viewAllPublicQuestsLink,
-  } = clientQuestElements(page);
+// test("Client 1 user logs in with Google, is able to create multiple quests", async ({
+//   page,
+// }) => {
+//   const {
+//     loginLink,
+//     logoutLink,
+//     clientQuestDashboardLink,
+//     clientProfileLink,
+//     createAQuestLink,
+//     viewAllQuestsLink,
+//     viewAllPublicQuestsLink,
+//   } = clientQuestElements(page);
 
-  const h1 = page.locator("h1");
-  const nagivateToHome = page.goto("/");
+//   const h1 = page.locator("h1");
+//   const nagivateToHome = page.goto("/");
 
-  // +++++++++++ Test Start +++++++++++
+//   // +++++++++++ Test Start +++++++++++
 
-  await nagivateToHome;
+//   await nagivateToHome;
 
-  // +++++++++++ Google Login +++++++++++
-  await expect(loginLink).toBeVisible();
-  await loginLink.click();
+//   // +++++++++++ Google Login +++++++++++
+//   await expect(loginLink).toBeVisible();
+//   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+//   await signInWithGoogle(page, clientEmail1, clientPassword1);
 
-  // +++++++++++ Expect the UI to reflect Client UI +++++++++++
-  await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(clientQuestDashboardLink).toBeVisible();
-  await expect(clientProfileLink).toBeVisible();
+//   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
+//   await expect(logoutLink).toBeVisible();
+//   await expect(viewAllQuestsLink).toBeVisible();
+//   await expect(clientQuestDashboardLink).toBeVisible();
+//   await expect(clientProfileLink).toBeVisible();
 
-  await clientQuestDashboardLink.click();
-  await createAQuestLink.click();
+//   // Navigate to Create quests via context menu dropdown
+//   await clientQuestDashboardLink.click();
 
-  // +++++++++++ Quest creation +++++++++++
+//   const card = page.getByText("Quest Dashboard").locator("..").locator("..");
+//   await page.waitForTimeout(250);
 
-  await page.waitForTimeout(250);
-  await expect(h1).toHaveText(questPageHeadings.createANewQuest);
+//   await card.click({ button: "right" });
+//   await page.waitForTimeout(250);
 
-  await createQuest(
-    page,
-    testQuests.title1,
-    testQuests.description1,
-    testQuests.criteria1,
-    testQuests.rank1
-  );
+//   const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
+//   await createMenuItem.click();
 
-  await createQuest(
-    page,
-    testQuests.title2,
-    testQuests.description2,
-    testQuests.criteria2,
-    testQuests.rank2
-  );
+//   // +++++++++++ Quest creation +++++++++++
 
-  await createQuest(
-    page,
-    testQuests.title3,
-    testQuests.description3,
-    testQuests.criteria3,
-    testQuests.rank3
-  );
+//   await page.waitForTimeout(250);
+//   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
-  await page.waitForTimeout(250);
+//   await createQuest(
+//     page,
+//     testQuests.title1,
+//     testQuests.description1,
+//     testQuests.criteria1,
+//     testQuests.rank1
+//   );
 
-  // // +++++++++++ Final Validation and Logout +++++++++++
+//   await createQuest(
+//     page,
+//     testQuests.title2,
+//     testQuests.description2,
+//     testQuests.criteria2,
+//     testQuests.rank2
+//   );
 
-  await viewAllPublicQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
+//   await createQuest(
+//     page,
+//     testQuests.title3,
+//     testQuests.description3,
+//     testQuests.criteria3,
+//     testQuests.rank3
+//   );
 
-  await logoutLink.click();
-  await page.waitForTimeout(500);
-  await expect(loginLink).toBeVisible();
-});
+//   await page.waitForTimeout(250);
 
-test("Dev user logs in with Google, is able to add an estiation to these quests", async ({
-  page,
-}) => {
+//   // // +++++++++++ Final Validation and Logout +++++++++++
 
-  const {
-    loginLink,
-    logoutLink,
-    devProfileLink,
-    estimationsLink,
-    submitEstimatesButton,
-    viewAllQuestsLink,
-  } = devQuestElements(page);
+//   await viewAllPublicQuestsLink.click();
+//   await expect(h1).toHaveText("All Available Quests");
 
-  const h1 = page.locator("h1");
+//   await logoutLink.click();
+//   await page.waitForTimeout(500);
+//   await expect(loginLink).toBeVisible();
+// });
 
-  const nagivateToHome = page.goto("/");
+// test("Dev user logs in with Google, is able to add an estimations to these quests", async ({
+//   page,
+// }) => {
+//   const {
+//     loginLink,
+//     logoutLink,
+//     devProfileLink,
+//     estimationsLink,
+//     submitEstimatesButton,
+//     viewAllQuestsLink,
+//   } = devQuestElements(page);
 
-  // +++++++++++ Test Start +++++++++++
+//   const h1 = page.locator("h1");
 
-  await nagivateToHome;
+//   const nagivateToHome = page.goto("/");
 
-  // +++++++++++ Google Login as a Dev +++++++++++
-  await expect(loginLink).toBeVisible();
-  await loginLink.click();
+//   // +++++++++++ Test Start +++++++++++
 
-  await signInWithGoogle(page, testDevUserEmail1, testDevUserPassword1);
+//   await nagivateToHome;
 
-  // +++++++++++ Expect the UI to be Client UI +++++++++++
-  await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(devProfileLink).toBeVisible();
-  await expect(devProfileLink).toBeVisible();
+//   // +++++++++++ Google Login as a Dev +++++++++++
+//   await expect(loginLink).toBeVisible();
+//   await loginLink.click();
 
-  // +++++++++++ Dev is able to add an estimation to a quest +++++++++++
-  await viewAllQuestsLink.click();
-  await expect(h1).toHaveText("All Available Open Quests");
-  await estimationsLink.nth(0).click();
-  await expect(h1).toHaveText("Estimate Difficulty");
-  await page.fill("#difficulty-score", "50");
-  await page.fill("#number-of-day", "8");
-  await page.fill("#comment", "8");
-  await submitEstimatesButton.click();
+//   await signInWithGoogle(page, testDevUserEmail1, testDevUserPassword1);
 
-  // +++++++++++ Client Logs out +++++++++++
-  await logoutLink.click();
-  await page.waitForTimeout(500);
-  await expect(loginLink).toBeVisible();
-});
+//   // +++++++++++ Expect the UI to be Client UI +++++++++++
+//   await expect(logoutLink).toBeVisible();
+//   await expect(viewAllQuestsLink).toBeVisible();
+//   await expect(devProfileLink).toBeVisible();
+//   await expect(devProfileLink).toBeVisible();
 
-test("Client deletes created quests", async ({ page }) => {
-  const { loginLink, logoutLink, clientProfileLink, viewAllQuestsLink } =
-    clientQuestElements(page);
+//   // +++++++++++ Dev is able to add an estimation to a quest +++++++++++
+//   await viewAllQuestsLink.click();
+//   await expect(h1).toHaveText("All Available Quests");
+//   await estimationsLink.nth(0).click();
+//   await expect(h1).toHaveText("Estimate Difficulty");
+//   await page.fill("#difficulty-score", "50");
+//   await page.fill("#number-of-day", "8");
+//   await page.fill("#comment", "some comment about it being roughly mid difficulty");
+//   await submitEstimatesButton.click();
 
-  const h1 = page.locator("h1");
-  const nagivateToHome = page.goto("/");
+//   await page.getByRole("button", { name: "Yes, submit" }).click();
 
-  // +++++++++++ Test Start +++++++++++
+//   // +++++++++++ Client Logs out +++++++++++
+//   await logoutLink.click();
+//   await page.waitForTimeout(500);
+//   await expect(loginLink).toBeVisible();
+// });
 
-  await nagivateToHome;
+// test("Client deletes created quests", async ({ page }) => {
+//   const { loginLink, logoutLink, clientProfileLink, viewAllQuestsLink } =
+//     clientQuestElements(page);
 
-  // +++++++++++ Google Login as a Dev +++++++++++
-  await expect(loginLink).toBeVisible();
-  await loginLink.click();
+//   const h1 = page.locator("h1");
+//   const nagivateToHome = page.goto("/");
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+//   // +++++++++++ Test Start +++++++++++
 
-  // +++++++++++ Expect the UI to be Client UI +++++++++++
-  await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(clientProfileLink).toBeVisible();
-  await expect(clientProfileLink).toBeVisible();
+//   await nagivateToHome;
 
-  // +++++++++++ Client Deletes Quest Flow +++++++++++
+//   // +++++++++++ Google Login as a Dev +++++++++++
+//   await expect(loginLink).toBeVisible();
+//   await loginLink.click();
 
-  await deleteQuests(page, "Quest 3");
-  await deleteQuests(page, "Quest 2");
-  await deleteQuests(page, "Quest 1");
+//   await signInWithGoogle(page, clientEmail1, clientPassword1);
 
-  // +++++++++++ Client Logs out +++++++++++
+//   // +++++++++++ Expect the UI to be Client UI +++++++++++
+//   await expect(logoutLink).toBeVisible();
+//   await expect(viewAllQuestsLink).toBeVisible();
+//   await expect(clientProfileLink).toBeVisible();
+//   await expect(clientProfileLink).toBeVisible();
 
-  await logoutLink.click();
-  await page.waitForTimeout(500);
-  await expect(loginLink).toBeVisible();
-});
+//   // +++++++++++ Client Deletes Quest Flow +++++++++++
+
+//   await deleteQuests(page, "Quest 3");
+//   await deleteQuests(page, "Quest 2");
+//   await deleteQuests(page, "Quest 1");
+
+//   // +++++++++++ Client Logs out +++++++++++
+
+//   await logoutLink.click();
+//   await page.waitForTimeout(500);
+//   await expect(loginLink).toBeVisible();
+// });

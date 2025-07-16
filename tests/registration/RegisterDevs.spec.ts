@@ -1,28 +1,30 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  testDevUserEmail1,
-  testDevUserEmail2,
-  testDevUserPassword1,
-  testDevUserPassword2,
+  devEmail1,
+  devEmail2,
+  devEmail3,
+  devEmail4,
+  devPassword1,
+  devPassword2,
+  devPassword3,
+  devPassword4,
 } from "@/configuration/Appconfig";
-import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
-import { buttonSelectors } from "@/selectors/ButtonSelectors";
+
+import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
+import { registerUser, validateHeroBar } from "@/helpers/RegistrationHelper";
 import { navBarSelectors } from "@/selectors/NavBarSelectors";
 
-test("Dev 1 user logs in with Google, is able to complete registration", async ({
+test("Dev 1 - user logs in with Auth0 and able to complete registration", async ({
   page,
 }) => {
   const {
     dashboardLink,
-    hiscoresLink,
     loginLink,
     logoutLink,
     profileLink,
     viewAllQuestsLink,
   } = navBarSelectors(page);
-
-  const { continueButton } = buttonSelectors(page);
 
   const nagivateToHome = page.goto("/");
 
@@ -34,114 +36,153 @@ test("Dev 1 user logs in with Google, is able to complete registration", async (
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testDevUserEmail1, testDevUserPassword1);
+  await signInAuth0(page, devEmail1, devPassword1);
 
-  // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
-  await expect(hiscoresLink).toBeVisible();
-  await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
-
+  // +++++++++++ Expect the UI to reflect NOT FULLY Registered Dev UI +++++++++++
+  await validateHeroBar(page);
   await page.waitForTimeout(1000);
 
-  // +++++++++++ Register Dev User 1 +++++++++++
-  await page.locator("#username").fill("vegeta");
+  // +++++++++++ Register the user +++++++++++
+  await registerUser(page, "bulma", "sally", "johns", "Dev");
 
-  // 2) Open the dropdown:
-  const trigger = page.locator('[data-testid="role-select-trigger"]');
-  // const trigger = page.locator("#role-select");
-  await expect(trigger).toBeVisible();
-  await page.waitForTimeout(250);
-  await trigger.click();
-
-  // 3) Wait for the dropdown panel to show up
-  const content = page.locator(
-    '[data-testid="role-select-content"][data-state="open"]'
-  );
-  await expect(content).toBeVisible();
-
-  // 4) Click “Dev”
-  const devOption = page.locator('[data-testid="role-select-item-Dev"]');
-  await expect(devOption).toBeVisible();
-  await devOption.click();
-
-  // 5) Finally click the “Continue” button
-  // const continueButton = page.getByRole("button", { name: "Continue" });
-  await expect(continueButton).toBeEnabled();
-  await continueButton.click();
+  // +++++++++++ Expect the UI to reflect FULLY Registered Dev UI +++++++++++
 
   await expect(viewAllQuestsLink).toBeVisible();
   await expect(dashboardLink).toBeVisible();
   await expect(profileLink).toBeVisible();
 
   await profileLink.click();
+
+  // +++++++++++ Logout +++++++++++
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
 });
 
-// test("Dev 2 user logs in with Google, is able to complete registration", async ({
-//   page,
-// }) => {
-//   const { continueButton } = buttonSelectors(page);
+test("Dev 2 - user logs in via Auth0 and is able to complete registration", async ({
+  page,
+}) => {
+  const {
+    dashboardLink,
+    loginLink,
+    logoutLink,
+    profileLink,
+    viewAllQuestsLink,
+  } = navBarSelectors(page);
 
-//   const {
-//     dashboardLink,
-//     hiscoresLink,
-//     loginLink,
-//     logoutLink,
-//     profileLink,
-//     viewAllQuestsLink,
-//   } = navBarSelectors(page);
+  const nagivateToHome = page.goto("/");
 
-//   const nagivateToHome = page.goto("/");
+  // +++++++++++ Test Start +++++++++++
 
-//   // +++++++++++ Test Start +++++++++++
+  await nagivateToHome;
 
-//   await nagivateToHome;
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
 
-//   // +++++++++++ Google Login +++++++++++
-//   await expect(loginLink).toBeVisible();
-//   await loginLink.click();
+  await signInAuth0(page, devEmail2, devPassword2);
 
-//   await signInWithGoogle(page, testDevUserEmail2, testDevUserPassword2);
+  // +++++++++++ Expect the UI to reflect NOT FULLY Registered Dev UI +++++++++++
+  await validateHeroBar(page);
+  await page.waitForTimeout(1000);
 
-//   // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
-//   await expect(hiscoresLink).toBeVisible();
-//   await expect(logoutLink).toBeVisible();
-//   await expect(viewAllQuestsLink).toBeVisible();
+  // +++++++++++ Register the user +++++++++++
+  await registerUser(page, "bulma2", "sally2", "johns2", "Dev");
 
-//   await page.waitForTimeout(1000);
+  // +++++++++++ Expect the UI to reflect FULLY Registered Dev UI +++++++++++
 
-//   // 1) Fill in the username
-//   await page.locator("#username").fill("kaiba");
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(dashboardLink).toBeVisible();
+  await expect(profileLink).toBeVisible();
 
-//   // 2) Open the dropdown:
-//   const trigger = page.locator('[data-testid="role-select-trigger"]');
-//   // const trigger = page.locator("#role-select");
-//   await expect(trigger).toBeVisible();
-//   await page.waitForTimeout(250);
-//   await trigger.click();
+  await profileLink.click();
 
-//   // 3) Wait for the dropdown panel to show up
-//   const content = page.locator(
-//     '[data-testid="role-select-content"][data-state="open"]'
-//   );
-//   await expect(content).toBeVisible();
+  // +++++++++++ Logout +++++++++++
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});
 
-//   // 4) Click “Dev”
-//   const devOption = page.locator('[data-testid="role-select-item-Dev"]');
-//   await expect(devOption).toBeVisible();
-//   await devOption.click();
+test("Dev 3 - user logs in via Auth0 and is able to complete registration", async ({
+  page,
+}) => {
+  const {
+    dashboardLink,
+    loginLink,
+    logoutLink,
+    profileLink,
+    viewAllQuestsLink,
+  } = navBarSelectors(page);
 
-//   // 5) Finally click the “Continue” button
-//   // const continueButton = page.getByRole("button", { name: "Continue" });
-//   await expect(continueButton).toBeEnabled();
-//   await continueButton.click();
+  const nagivateToHome = page.goto("/");
 
-//   await expect(viewAllQuestsLink).toBeVisible();
-//   await expect(dashboardLink).toBeVisible();
-//   await expect(profileLink).toBeVisible();
+  // +++++++++++ Test Start +++++++++++
 
-//   await profileLink.click();
-//   await logoutLink.click();
-//   await expect(loginLink).toBeVisible();
-// });
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, devEmail3, devPassword3);
+
+  // +++++++++++ Expect the UI to reflect NOT FULLY Registered Dev UI +++++++++++
+  await validateHeroBar(page);
+  await page.waitForTimeout(1000);
+
+  // +++++++++++ Register the user +++++++++++
+  await registerUser(page, "bulma3", "sally3", "johns3", "Dev");
+
+  // +++++++++++ Expect the UI to reflect FULLY Registered Dev UI +++++++++++
+
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(dashboardLink).toBeVisible();
+  await expect(profileLink).toBeVisible();
+
+  await profileLink.click();
+
+  // +++++++++++ Logout +++++++++++
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});
+
+test("Dev 4 - user logs in via Auth0 and is able to complete registration", async ({
+  page,
+}) => {
+  const {
+    dashboardLink,
+    loginLink,
+    logoutLink,
+    profileLink,
+    viewAllQuestsLink,
+  } = navBarSelectors(page);
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, devEmail4, devPassword4);
+
+  // +++++++++++ Expect the UI to reflect NOT FULLY Registered Dev UI +++++++++++
+  await validateHeroBar(page);
+  await page.waitForTimeout(1000);
+
+  // +++++++++++ Register the user +++++++++++
+  await registerUser(page, "bulma4", "sally4", "johns4", "Dev");
+
+  // +++++++++++ Expect the UI to reflect FULLY Registered Dev UI +++++++++++
+
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(dashboardLink).toBeVisible();
+  await expect(profileLink).toBeVisible();
+
+  await profileLink.click();
+
+  // +++++++++++ Logout +++++++++++
+  await logoutLink.click();
+  await expect(loginLink).toBeVisible();
+});

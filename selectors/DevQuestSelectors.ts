@@ -23,11 +23,11 @@ export const devQuestElements = (page: Page) => ({
   reviewButton: page.getByRole("button", { name: "Review" }),
 
   moveToInProgressButton: page.getByRole("button", {
-    name: "Move quest to In Progress",
+    name: "Change Status to In Progress",
   }),
   
   moveToReviewButton: page.getByRole("button", {
-    name: "Move quest to in Review",
+    name: "Change Status to Review",
   }),
   moveToCompletedButton: page.getByRole("button", {
     name: "Move quest to Completed",

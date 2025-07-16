@@ -2,14 +2,50 @@
 
 import * as dotenv from "dotenv";
 
-export const testDevUserEmail1 = process.env.TEST_USER_DEV_EMAIL || "No client email defined for TEST_USER_DEV_EMAIL"; 
-export const testDevUserPassword1 = process.env.TEST_USER_DEV_PASSWORD || "No client password defined for TEST_USER_DEV_PASSWORD"; 
+// #####################
 
-export const testDevUserEmail2 = process.env.TEST_USER_DEV2_EMAIL || "No client email defined for TEST_USER_DEV2_EMAIL"; 
-export const testDevUserPassword2 = process.env.TEST_USER_DEV2_PASSWORD || "No client password defined for TEST_USER_DEV2_PASSWORD"; 
+export const devEmail1 =
+  process.env.DEV_EMAIL_1 || "No client email defined for USER_DEV_EMAIL_1";
+export const devPassword1 =
+  process.env.DEV_PASSWORD_1 || "No client password defined for DEV_PASSWORD_1";
 
-export const testClientUserEmail1 = process.env.TEST_USER_CLIENT_EMAIL || "No client email defined for TEST_USER_CLIENT_EMAIL"; 
-export const testClientUserPassword1 = process.env.TEST_USER_CLIENT_PASSWORD || "No client password defined for TEST_USER_CLIENT_PASSWORD"; 
+export const devEmail2 =
+  process.env.DEV_EMAIL_2 || "No client email defined for DEV_EMAIL_2";
+export const devPassword2 =
+  process.env.DEV_PASSWORD_2 || "No client password defined for DEV_PASSWORD_2";
 
-export const testClientUserEmail2 = process.env.TEST_USER_CLIENT2_EMAIL || "No client email defined for TEST_USER_CLIENT2_EMAIL"; 
-export const testClientUserPassword2 = process.env.TEST_USER_CLIENT2_PASSWORD || "No client password defined for TEST_USER_CLIENT2_PASSWORD"; 
+export const devEmail3 =
+  process.env.DEV_EMAIL_3 || "No client email defined for DEV_EMAIL_3";
+export const devPassword3 =
+  process.env.DEV_PASSWORD_3 || "No client password defined for DEV_PASSWORD_3";
+
+export const devEmail4 =
+  process.env.DEV_EMAIL_4 || "No client email defined for DEV_EMAIL_4";
+export const devPassword4 =
+  process.env.DEV_PASSWORD_4 || "No client password defined for DEV_PASSWORD_4";
+
+// #####################
+
+export const clientEmail1 =
+  process.env.CLIENT_EMAIL_1 || "No client email defined for CLIENT_EMAIL_1";
+export const clientPassword1 =
+  process.env.CLIENT_PASSWORD_1 ||
+  "No client password defined for CLIENT_PASSWORD_1";
+
+export const clientEmail2 =
+  process.env.CLIENT_EMAIL_2 || "No client email defined for CLIENT_EMAIL_2";
+export const clientPassword2 =
+  process.env.CLIENT_PASSWORD_2 ||
+  "No client password defined for CLIENT_PASSWORD_2";
+
+export const clientEmail3 =
+  process.env.CLIENT_EMAIL_3 || "No client email defined for CLIENT_EMAIL_3";
+export const clientPassword3 =
+  process.env.CLIENT_PASSWORD_3 ||
+  "No client password defined for CLIENT_PASSWORD_3";
+
+export const clientEmail4 =
+  process.env.CLIENT_EMAIL_4 || "No client email defined for CLIENT_EMAIL_4";
+export const clientPassword4 =
+  process.env.CLIENT_PASSWORD_4 ||
+  "No client password defined for CLIENT_PASSWORD_4";

@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  testClientUserEmail1,
-  testClientUserPassword1,
-  testDevUserEmail1,
-  testDevUserPassword1,
+  clientEmail1,
+  clientPassword1,
+  devEmail1,
+  devPassword1,
 } from "@/configuration/Appconfig";
 
 import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
@@ -44,7 +44,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -132,7 +132,7 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -211,6 +211,61 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await page.waitForTimeout(500);
   await expect(loginLink).toBeVisible();
 });
+
+
+test("Dev user logs in with Google, is able to add an estimations to these quests", async ({
+  page,
+}) => {
+  const {
+    loginLink,
+    logoutLink,
+    devProfileLink,
+    estimationsLink,
+    submitEstimatesButton,
+    viewAllQuestsLink,
+  } = devQuestElements(page);
+
+  const h1 = page.locator("h1");
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login as a Dev +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInWithGoogle(page, testDevUserEmail1, testDevUserPassword1);
+
+  // +++++++++++ Expect the UI to be Client UI +++++++++++
+  await expect(logoutLink).toBeVisible();
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(devProfileLink).toBeVisible();
+  await expect(devProfileLink).toBeVisible();
+
+  // +++++++++++ Dev is able to add an estimation to a quest +++++++++++
+  await viewAllQuestsLink.click();
+  await expect(h1).toHaveText("All Available Quests");
+  await estimationsLink.nth(0).click();
+  await expect(h1).toHaveText("Estimate Difficulty");
+  await page.fill("#difficulty-score", "50");
+  await page.fill("#number-of-day", "8");
+  await page.fill("#comment", "some comment about it being roughly mid difficulty");
+  await submitEstimatesButton.click();
+
+  await page.getByRole("button", { name: "Yes, submit" }).click();
+
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.click();
+  await page.waitForTimeout(500);
+  await expect(loginLink).toBeVisible();
+});
+
+
+// TODO: Add non social auth to allow user creation with out tons of google accounts etc. 
+// we added a estimation limit for at least 3 estimations and the client has to set the quest status to open to allow devs to pick up the quest, like in the below tests
 
 test("Dev user logs in with Google, is able to accept some quests and move it from NotStarted -> InProgress -> Review", async ({
   page,
@@ -318,7 +373,7 @@ test("Client user logs in with Google, is able to move a quest in Review to Comp
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -368,7 +423,7 @@ test("Client deletes created quests", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();

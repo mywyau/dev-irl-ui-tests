@@ -1,24 +1,28 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  testClientUserEmail1,
-  testClientUserEmail2,
-  testClientUserPassword1,
-  testClientUserPassword2
+  clientEmail1,
+  clientEmail2,
+  clientEmail3,
+  clientEmail4,
+  clientPassword1,
+  clientPassword2,
+  clientPassword3,
+  clientPassword4,
 } from "@/configuration/Appconfig";
 
-import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
+import {
+  deleteUserViaProfilePage,
+  heroBarIsVisable,
+  signInAuth0,
+} from "@/helpers/NonSocialAuth0Helper";
 import { navBarSelectors } from "@/selectors/NavBarSelectors";
 
 test("Client 1 - Login and delete the test client user profile", async ({
   page,
 }) => {
   const {
-    dashboardLink,
     loginLink,
-    logoutLink,
-    profileLink,
-    viewAllQuestsLink,
   } = navBarSelectors(page);
 
   const nagivateToHome = page.goto("/");
@@ -31,19 +35,89 @@ test("Client 1 - Login and delete the test client user profile", async ({
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
-  await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(dashboardLink).toBeVisible();
-  await expect(profileLink).toBeVisible();
+  await heroBarIsVisable(page);
 
   // +++++++++++ Delete the Client Profile +++++++++++
-  await profileLink.click();
-  await page.waitForTimeout(2000);
-  await page.getByRole("button", { name: "Delete profile" }).click();
-  await page.getByRole("button", { name: "Yes, delete my profile" }).click();
-  await logoutLink.click();
+  await deleteUserViaProfilePage(page);
+});
+
+test("Client 2 - Login and delete the test client user profile", async ({
+  page,
+}) => {
+  const {
+    loginLink,
+  } = navBarSelectors(page);
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
   await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, clientEmail2, clientPassword2);
+
+  // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
+  await heroBarIsVisable(page);
+
+  // +++++++++++ Delete the Client Profile +++++++++++
+  await deleteUserViaProfilePage(page);
+});
+
+test("Client 3 - Login and delete the test client user profile", async ({
+  page,
+}) => {
+  const {
+    loginLink,
+  } = navBarSelectors(page);
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, clientEmail3, clientPassword3);
+
+  // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
+  await heroBarIsVisable(page);
+
+  // +++++++++++ Delete the Client Profile +++++++++++
+  await deleteUserViaProfilePage(page);
+});
+
+test("Client 4 - Login and delete the test client user profile", async ({
+  page,
+}) => {
+  const {
+    loginLink,
+  } = navBarSelectors(page);
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, clientEmail4, clientPassword4);
+
+  // +++++++++++ Expect the UI to reflect Dev UI +++++++++++
+  await heroBarIsVisable(page);
+
+  // +++++++++++ Delete the Client Profile +++++++++++
+  await deleteUserViaProfilePage(page);
 });

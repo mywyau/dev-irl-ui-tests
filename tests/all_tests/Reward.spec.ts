@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  testClientUserEmail1,
-  testClientUserPassword1,
+  clientEmail1,
+  clientPassword1,
 } from "@/configuration/Appconfig";
 
 import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
@@ -41,7 +41,7 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -125,7 +125,7 @@ test("Client user logs in with Google, is able to add rewards to these quests", 
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -168,7 +168,7 @@ test("Client deletes created quests", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();

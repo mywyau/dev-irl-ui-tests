@@ -1,6 +1,6 @@
 import {
-  testClientUserEmail1,
-  testClientUserPassword1,
+  clientEmail1,
+  clientPassword1,
 } from "@/configuration/Appconfig";
 import {
   questPageHeadings,
@@ -32,7 +32,7 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testClientUserEmail1, testClientUserPassword1);
+  await signInWithGoogle(page, clientEmail1, clientPassword1);
 
   // ✅ Client UI loaded
   await expect(logoutLink).toBeVisible();

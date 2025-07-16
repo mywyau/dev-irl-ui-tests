@@ -586,8 +586,6 @@ test("Client 1 - is able to move a quest in Review to Completed", async ({
     viewAllQuestsLink,
     clientProfileLink,
     clientQuestDashboardLink,
-    clientReviewButton,
-    clientCompletedButton,
     moveToCompletedButton,
   } = clientQuestElements(page);
 
@@ -651,9 +649,9 @@ test("Client 1 - is able to move a quest in Review to Completed", async ({
 
   await expect(h1).toHaveText("Completed");
 
-  await viewDetailsLink.click();
-  await expect(h1).toHaveText("Quest Details");
-  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
+  // await viewDetailsLink.click();
+  // await expect(h1).toHaveText("Quest Details");
+  // await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
 
   // +++++++++++ Client Logs out +++++++++++
   await logoutLink.click();

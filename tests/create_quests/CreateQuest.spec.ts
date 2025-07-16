@@ -7,7 +7,7 @@ import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
 import { expect, test } from "@playwright/test";
 
 import { createQuest } from "@/helpers/CreateQuestsHelper";
-import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
+import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
 
 test("Client user logs in and creates multiple quests", async ({ page }) => {
   const {
@@ -28,7 +28,7 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, clientEmail1, clientPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // ✅ Client UI loaded
   await expect(logoutLink).toBeVisible();

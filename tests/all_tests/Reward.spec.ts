@@ -1,9 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import {
-  clientEmail1,
-  clientPassword1,
-} from "@/configuration/Appconfig";
+import { clientEmail1, clientPassword1 } from "@/configuration/Appconfig";
 
 import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
 
@@ -13,7 +10,7 @@ import {
 } from "@/constants/CreateQuestsConstants";
 
 import { createQuest } from "@/helpers/CreateQuestsHelper";
-import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
+import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
 import { deleteQuests } from "@/helpers/QuestHelper";
 import { rewardElements } from "@/selectors/RewardSelectors";
 
@@ -41,7 +38,7 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, clientEmail1, clientPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -50,7 +47,18 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   await expect(clientProfileLink).toBeVisible();
 
   await clientQuestDashboardLink.click();
-  await createAQuestLink.click();
+
+  const questDashboardCard = page
+    .getByText("Quest Dashboard")
+    .locator("..")
+    .locator("..");
+  await page.waitForTimeout(200);
+
+  await questDashboardCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
+  await createMenuItem.click();
 
   // +++++++++++ Quest creation +++++++++++
 
@@ -125,7 +133,7 @@ test("Client user logs in with Google, is able to add rewards to these quests", 
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, clientEmail1, clientPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -136,11 +144,39 @@ test("Client user logs in with Google, is able to add rewards to these quests", 
   // +++++++++++ Client is able to add an reward to a quest +++++++++++
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
-  await viewMyQuestsLink.click();
+
+  const questDashboardCard = page
+    .getByText("Quest Dashboard")
+    .locator("..")
+    .locator("..");
+  await page.waitForTimeout(200);
+
+  await questDashboardCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const viewMyQuestsMenuItem = page.getByRole("menuitem", {
+    name: "View My Quests",
+  });
+
+  await viewMyQuestsMenuItem.click();
+
   await expect(h1).toHaveText("My Quests");
   await detailsLink.nth(0).click();
+
   await expect(h1).toHaveText("Quest Details");
-  await addRewardButton.click();
+
+  const questCard = page
+    .getByText(testQuests.title3)
+    .locator("..")
+    .locator("..");
+  await page.waitForTimeout(200);
+
+  await questCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const addAReward = page.getByRole("menuitem", { name: "Add a Reward" });
+  await addAReward.click();
+
   await expect(h1).toHaveText("Add Quest Reward");
   await timeRewardInput;
   await completionRewardInput;
@@ -168,7 +204,7 @@ test("Client deletes created quests", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, clientEmail1, clientPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();

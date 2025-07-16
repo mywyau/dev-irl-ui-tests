@@ -24,6 +24,7 @@ export async function deleteQuests(page: Page, questTitle: string) {
   const viewMyQuestsMenuItem = page.getByRole("menuitem", {
     name: "View My Quests",
   });
+  
   await viewMyQuestsMenuItem.click();
 
   await expect(h1).toHaveText("My Quests");

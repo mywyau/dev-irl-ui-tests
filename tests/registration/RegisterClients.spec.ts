@@ -12,7 +12,7 @@ import {
 } from "@/configuration/Appconfig";
 
 import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
-import { registerUser, validateHeroBar } from "@/helpers/RegistrationHelper, "Client"";
+import { registerUser, validateHeroBar } from "@/helpers/RegistrationHelper"
 import { navBarSelectors } from "@/selectors/NavBarSelectors";
 
 test("Client 1 - user logs in with Auth0 and able to complete registration", async ({

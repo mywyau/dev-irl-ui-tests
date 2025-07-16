@@ -1,7 +1,4 @@
-import {
-  clientEmail1,
-  clientPassword1,
-} from "@/configuration/Appconfig";
+import { clientEmail1, clientPassword1 } from "@/configuration/Appconfig";
 import {
   questPageHeadings,
   testQuests,
@@ -18,7 +15,6 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
     logoutLink,
     clientQuestDashboardLink,
     clientProfileLink,
-    createAQuestLink,
     viewAllQuestsLink,
     viewAllPublicQuestsLink,
   } = clientQuestElements(page);
@@ -51,7 +47,7 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
 
   const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
   await createMenuItem.click();
-  
+
   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
   await createQuest(

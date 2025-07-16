@@ -4,7 +4,11 @@ import {
   clientEmail1,
   clientPassword1,
   devEmail1,
+  devEmail2,
+  devEmail3,
   devPassword1,
+  devPassword2,
+  devPassword3,
 } from "@/configuration/Appconfig";
 
 import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
@@ -14,15 +18,12 @@ import {
   questPageHeadings,
   testQuests,
 } from "@/constants/CreateQuestsConstants";
-
 import { createQuest } from "@/helpers/CreateQuestsHelper";
-import { signInWithGoogle } from "@/helpers/GoogleOAuthHelper";
+import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
 import { deleteQuests } from "@/helpers/QuestHelper";
 import { simpleSelectors } from "@/selectors/SimpleSelectors";
 
-test("Client user logs in with Google, is able to create multiple quests", async ({
-  page,
-}) => {
+test("Client 1 - is able to create multiple quests", async ({ page }) => {
   const {
     loginLink,
     logoutLink,
@@ -44,7 +45,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, clientEmail1, clientPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -56,17 +57,17 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await clientQuestDashboardLink.click();
 
   const card = page.getByText("Quest Dashboard").locator("..").locator("..");
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   await card.click({ button: "right" });
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
   await createMenuItem.click();
 
   // +++++++++++ Quest creation +++++++++++
 
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
   await createQuest(
@@ -93,7 +94,7 @@ test("Client user logs in with Google, is able to create multiple quests", async
     testQuests.rank3
   );
 
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   // // +++++++++++ Final Validation and Logout +++++++++++
 
@@ -101,11 +102,11 @@ test("Client user logs in with Google, is able to create multiple quests", async
   await expect(h1).toHaveText("All Available Quests");
 
   await logoutLink.click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 });
 
-test("Client can edit a previously created quest", async ({ page }) => {
+test("Client 1 - can edit a previously created quest", async ({ page }) => {
   const { h1 } = simpleSelectors(page);
 
   const {
@@ -132,7 +133,7 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, clientEmail1, clientPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to reflect Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -145,10 +146,10 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await expect(h1).toHaveText("Quest Dashboard");
 
   const card = page.getByText("Quest Dashboard").locator("..").locator("..");
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   await card.click({ button: "right" });
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   const viewMyQuestsMenuItem = page.getByRole("menuitem", {
     name: "View My Quests",
@@ -160,7 +161,7 @@ test("Client can edit a previously created quest", async ({ page }) => {
   await expect(h1).toHaveText("Quest Details");
 
   await expect(page.locator("#quest-title")).toHaveText("Quest 3");
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   // await editQuestButton.click();
 
@@ -171,33 +172,33 @@ test("Client can edit a previously created quest", async ({ page }) => {
 
   await questCard.click({ button: "right" });
   await page.waitForTimeout(200);
-  await editQuestMenuItem.click();  
+  await editQuestMenuItem.click();
 
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
   await expect(h1).toHaveText("Edit Quest");
 
   // 1) Open the dropdown:
   await expect(trigger).toBeVisible();
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
   await trigger.click();
 
   // 2) Click Aether"
   await page.locator('div[role="option"]', { hasText: "Aether" }).click();
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   await page.fill("#quest-title", "Updated Quest 3");
   await page.fill(
     "#quest-description",
     "Some updated description for quest 3 to make it harder"
   );
-  
+
   await updateQuestButton.click();
 
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
 
   await card.click({ button: "right" });
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   await viewMyQuestsMenuItem.click();
 
@@ -208,12 +209,11 @@ test("Client can edit a previously created quest", async ({ page }) => {
 
   // +++++++++++ Client Logout Flow +++++++++++
   await logoutLink.click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 });
 
-
-test("Dev user logs in with Google, is able to add an estimations to these quests", async ({
+test("Dev 1 - is able to add an estimation to these quests", async ({
   page,
 }) => {
   const {
@@ -226,6 +226,7 @@ test("Dev user logs in with Google, is able to add an estimations to these quest
   } = devQuestElements(page);
 
   const h1 = page.locator("h1");
+  const h2 = page.locator("h2");
 
   const nagivateToHome = page.goto("/");
 
@@ -237,7 +238,7 @@ test("Dev user logs in with Google, is able to add an estimations to these quest
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testDevUserEmail1, testDevUserPassword1);
+  await signInAuth0(page, devEmail1, devPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -250,24 +251,216 @@ test("Dev user logs in with Google, is able to add an estimations to these quest
   await expect(h1).toHaveText("All Available Quests");
   await estimationsLink.nth(0).click();
   await expect(h1).toHaveText("Estimate Difficulty");
+  await expect(h2.nth(0)).toHaveText("Updated Quest 3");
   await page.fill("#difficulty-score", "50");
   await page.fill("#number-of-day", "8");
-  await page.fill("#comment", "some comment about it being roughly mid difficulty");
+  await page.fill(
+    "#comment",
+    "some comment about it being roughly mid difficulty"
+  );
   await submitEstimatesButton.click();
 
   await page.getByRole("button", { name: "Yes, submit" }).click();
 
   // +++++++++++ Client Logs out +++++++++++
   await logoutLink.click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 });
 
+test("Dev 2 - is able to add an estimation to these quests", async ({
+  page,
+}) => {
+  const {
+    loginLink,
+    logoutLink,
+    devProfileLink,
+    estimationsLink,
+    submitEstimatesButton,
+    viewAllQuestsLink,
+  } = devQuestElements(page);
 
-// TODO: Add non social auth to allow user creation with out tons of google accounts etc. 
-// we added a estimation limit for at least 3 estimations and the client has to set the quest status to open to allow devs to pick up the quest, like in the below tests
+  const h1 = page.locator("h1");
+  const h2 = page.locator("h2");
 
-test("Dev user logs in with Google, is able to accept some quests and move it from NotStarted -> InProgress -> Review", async ({
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login as a Dev +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, devEmail2, devPassword2);
+
+  // +++++++++++ Expect the UI to be Client UI +++++++++++
+  await expect(logoutLink).toBeVisible();
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(devProfileLink).toBeVisible();
+  await expect(devProfileLink).toBeVisible();
+
+  // +++++++++++ Dev is able to add an estimation to a quest +++++++++++
+  await viewAllQuestsLink.click();
+  await expect(h1).toHaveText("All Available Quests");
+  await estimationsLink.nth(0).click();
+  await expect(h1).toHaveText("Estimate Difficulty");
+  await expect(h2.nth(0)).toHaveText("Updated Quest 3");
+  await page.fill("#difficulty-score", "50");
+  await page.fill("#number-of-day", "8");
+  await page.fill(
+    "#comment",
+    "some comment about it being roughly mid difficulty"
+  );
+  await submitEstimatesButton.click();
+
+  await page.getByRole("button", { name: "Yes, submit" }).click();
+
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.click();
+  await page.waitForTimeout(200);
+  await expect(loginLink).toBeVisible();
+});
+
+test("Dev 3 - is able to add an estimation to these quests", async ({
+  page,
+}) => {
+  const {
+    loginLink,
+    logoutLink,
+    devProfileLink,
+    estimationsLink,
+    submitEstimatesButton,
+    viewAllQuestsLink,
+  } = devQuestElements(page);
+
+  const h1 = page.locator("h1");
+  const h2 = page.locator("h2");
+
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login as a Dev +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, devEmail3, devPassword3);
+
+  // +++++++++++ Expect the UI to be Client UI +++++++++++
+  await expect(logoutLink).toBeVisible();
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(devProfileLink).toBeVisible();
+  await expect(devProfileLink).toBeVisible();
+
+  // +++++++++++ Dev is able to add an estimation to a quest +++++++++++
+  await viewAllQuestsLink.click();
+  await expect(h1).toHaveText("All Available Quests");
+  await estimationsLink.nth(0).click();
+  await expect(h1).toHaveText("Estimate Difficulty");
+  await expect(h2.nth(0)).toHaveText("Updated Quest 3");
+  await page.fill("#difficulty-score", "50");
+  await page.fill("#number-of-day", "8");
+  await page.fill(
+    "#comment",
+    "some comment about it being roughly mid difficulty"
+  );
+  await submitEstimatesButton.click();
+
+  await page.getByRole("button", { name: "Yes, submit" }).click();
+
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.click();
+  await page.waitForTimeout(200);
+  await expect(loginLink).toBeVisible();
+});
+
+test("Client 1 - is able to set the quest status form estimated to open", async ({
+  page,
+}) => {
+  const {
+    detailsLink,
+    loginLink,
+    logoutLink,
+    clientQuestDashboardLink,
+    clientProfileLink,
+    viewAllQuestsLink,
+    viewAllPublicQuestsLink,
+  } = clientQuestElements(page);
+
+  const h1 = page.locator("h1");
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, clientEmail1, clientPassword1);
+
+  // +++++++++++ Expect the UI to reflect Client UI +++++++++++
+  await expect(logoutLink).toBeVisible();
+  await expect(viewAllQuestsLink).toBeVisible();
+  await expect(clientQuestDashboardLink).toBeVisible();
+  await expect(clientProfileLink).toBeVisible();
+
+  // Navigate to Create quests via context menu dropdown
+  await clientQuestDashboardLink.click();
+
+  const questDashboardCard = page
+    .getByText("Quest Dashboard")
+    .locator("..")
+    .locator("..");
+  await page.waitForTimeout(200);
+
+  await questDashboardCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const viewMyQuestsMenuItem = page.getByRole("menuitem", {
+    name: "View My Quests",
+  });
+
+  await viewMyQuestsMenuItem.click();
+
+  await page.waitForTimeout(200);
+
+  await detailsLink.first().click();
+  await expect(h1).toHaveText("Quest Details");
+
+  const questCard = page
+    .getByText("Updated Quest 3")
+    .locator("..")
+    .locator("..");
+  await page.waitForTimeout(200);
+
+  await questCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const setToOpenMenuItem = page.getByRole("menuitem", {
+    name: "Set to Open",
+  });
+
+  await setToOpenMenuItem.click();
+  await page.waitForTimeout(200);
+  await page.getByRole("button", { name: "Confirm" }).click();
+
+  // // +++++++++++ Final Validation and Logout +++++++++++
+
+  await viewAllPublicQuestsLink.click();
+  await expect(h1).toHaveText("All Available Quests");
+
+  await logoutLink.click();
+  await page.waitForTimeout(200);
+  await expect(loginLink).toBeVisible();
+});
+
+test("Dev 1, is able to accept some quests and move it from NotStarted -> InProgress -> Review", async ({
   page,
 }) => {
   const {
@@ -298,7 +491,7 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, testDevUserEmail1, testDevUserPassword1);
+  await signInAuth0(page, devEmail1, devPassword1);
 
   // 1. Expect the UI to reflect DEV UI
 
@@ -314,39 +507,80 @@ test("Dev user logs in with Google, is able to accept some quests and move it fr
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
   await acceptQuestButton.click();
+  await page.waitForTimeout(200);
+  await page.getByRole("button", { name: "Confirm" }).click();
+
   await devQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
-  await notStartedButton.click();
+
+  const questDashboardCard = page
+    .getByText("Quest Dashboard")
+    .locator("..")
+    .locator("..");
+  await page.waitForTimeout(200);
+
+  await questDashboardCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const notStartedMenuItem = page.getByRole("menuitem", {
+    name: "Not Started",
+  });
+
+  await notStartedMenuItem.click();
   await expect(h1).toHaveText("Not Started");
+  await page.waitForTimeout(200);
   await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
-  await viewDetailsLink.click();
-  await expect(h1).toHaveText("Quest Details");
-  await page.goBack();
+
   await moveToInProgressButton.click();
+
+  await page.getByRole("button", { name: "Confirm" }).click();
+
   await devQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
-  await inProgressButton.click();
+
+  await page.waitForTimeout(200);
+
+  await questDashboardCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const inProgressMenuItem = page.getByRole("menuitem", {
+    name: "In Progress",
+  });
+
+  await inProgressMenuItem.click();
+
   await expect(h1).toHaveText("In Progress");
+  await page.waitForTimeout(200);
   await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
-  await viewDetailsLink.click();
-  await expect(h1).toHaveText("Quest Details");
-  await page.goBack();
+
   await moveToReviewButton.click();
+  await page.getByRole("button", { name: "Confirm" }).click();
+
   await devQuestDashboardLink.click();
+
   await expect(h1).toHaveText("Quest Dashboard");
-  await reviewButton.click();
+
+  await page.waitForTimeout(200);
+
+  await questDashboardCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const reviewMenuItem = page.getByRole("menuitem", {
+    name: "Review",
+  });
+
+  await reviewMenuItem.click();
+
   await expect(h1).toHaveText("Review");
   await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
-  await viewDetailsLink.click();
-  await page.goBack();
 
   // +++++++++++ Dev is able to Log out +++++++++++
   await logoutLink.click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 });
 
-test("Client user logs in with Google, is able to move a quest in Review to Completed", async ({
+test("Client 1 - is able to move a quest in Review to Completed", async ({
   page,
 }) => {
   const {
@@ -365,6 +599,11 @@ test("Client user logs in with Google, is able to move a quest in Review to Comp
 
   const nagivateToHome = page.goto("/");
 
+  const questDashboardCard = page
+    .getByText("Quest Dashboard")
+    .locator("..")
+    .locator("..");
+
   // +++++++++++ Test Start +++++++++++
 
   await nagivateToHome;
@@ -373,7 +612,7 @@ test("Client user logs in with Google, is able to move a quest in Review to Comp
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, clientEmail1, clientPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -384,31 +623,49 @@ test("Client user logs in with Google, is able to move a quest in Review to Comp
   // +++++++++++ Client processes quest to Completed status +++++++++++
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
-  await clientReviewButton.click();
+  await page.waitForTimeout(200);
+  
+  await questDashboardCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const reviewMenuItem = page.getByRole("menuitem", {
+    name: "Review",
+  });
+
+  await reviewMenuItem.click();
+
   await expect(h1).toHaveText("Review");
   await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
 
-  await viewDetailsLink.click();
-  await expect(h1).toHaveText("Quest Details");
-  await page.goBack();
   await moveToCompletedButton.click();
+
+  await page.getByRole("button", { name: "Yes, complete it" }).click();
 
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
-  await clientCompletedButton.click();
+
+  await questDashboardCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+
+  const completedMenuItem = page.getByRole("menuitem", {
+    name: "Completed",
+  });
+
+  await completedMenuItem.click();
 
   await expect(h1).toHaveText("Completed");
+
   await viewDetailsLink.click();
   await expect(h1).toHaveText("Quest Details");
   await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
 
   // +++++++++++ Client Logs out +++++++++++
   await logoutLink.click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 });
 
-test("Client deletes created quests", async ({ page }) => {
+test("Client 1 - deletes the quests they created", async ({ page }) => {
   const { loginLink, logoutLink, clientProfileLink, viewAllQuestsLink } =
     clientQuestElements(page);
 
@@ -423,7 +680,7 @@ test("Client deletes created quests", async ({ page }) => {
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
-  await signInWithGoogle(page, clientEmail1, clientPassword1);
+  await signInAuth0(page, clientEmail1, clientPassword1);
 
   // +++++++++++ Expect the UI to be Client UI +++++++++++
   await expect(logoutLink).toBeVisible();
@@ -440,6 +697,6 @@ test("Client deletes created quests", async ({ page }) => {
   // +++++++++++ Client Logs out +++++++++++
 
   await logoutLink.click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 });

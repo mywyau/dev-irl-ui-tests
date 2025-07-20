@@ -114,9 +114,7 @@ test("Client 1 - can edit a previously created quest", async ({ page }) => {
     logoutLink,
     clientProfileLink,
     clientQuestDashboardLink,
-    editQuestButton,
     updateQuestButton,
-    viewMyQuestsLink,
     detailsLink,
     viewAllQuestsLink,
   } = clientQuestElements(page);
@@ -163,9 +161,7 @@ test("Client 1 - can edit a previously created quest", async ({ page }) => {
   await expect(page.locator("#quest-title")).toHaveText("Quest 3");
   await page.waitForTimeout(200);
 
-  // await editQuestButton.click();
-
-  const questCard = page.getByText("Quest 3").locator("..").locator("..");
+  const questCard = page.getByTestId("quest-card-quest-3");
   const editQuestMenuItem = page.getByRole("menuitem", {
     name: "Edit Quest",
   });
@@ -433,10 +429,7 @@ test("Client 1 - is able to set the quest status form estimated to open", async 
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
 
-  const questCard = page
-    .getByText("Updated Quest 3")
-    .locator("..")
-    .locator("..");
+  const questCard = page.getByTestId("quest-card-updated-quest-3");
   await page.waitForTimeout(200);
 
   await questCard.click({ button: "right" });
@@ -513,6 +506,7 @@ test("Dev 1, is able to accept some quests and move it from NotStarted -> InProg
     .getByText("Quest Dashboard")
     .locator("..")
     .locator("..");
+
   await page.waitForTimeout(200);
 
   await questDashboardCard.click({ button: "right" });
@@ -648,10 +642,6 @@ test("Client 1 - is able to move a quest in Review to Completed", async ({
   await completedMenuItem.click();
 
   await expect(h1).toHaveText("Completed");
-
-  // await viewDetailsLink.click();
-  // await expect(h1).toHaveText("Quest Details");
-  // await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
 
   // +++++++++++ Client Logs out +++++++++++
   await logoutLink.click();

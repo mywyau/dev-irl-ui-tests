@@ -2,6 +2,10 @@ import { expect, Page } from "@playwright/test";
 
 import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
 
+function normalizeTestId(title: string): string {
+  return title.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
 export async function deleteQuests(page: Page, questTitle: string) {
   const {
     clientQuestDashboardLink,
@@ -24,7 +28,7 @@ export async function deleteQuests(page: Page, questTitle: string) {
   const viewMyQuestsMenuItem = page.getByRole("menuitem", {
     name: "View My Quests",
   });
-  
+
   await viewMyQuestsMenuItem.click();
 
   await expect(h1).toHaveText("My Quests");
@@ -33,15 +37,12 @@ export async function deleteQuests(page: Page, questTitle: string) {
   await expect(page.locator("#quest-title")).toHaveText(questTitle);
   await page.waitForTimeout(200);
 
-  const questCard = page.getByText(questTitle).locator("..").locator("..");
-  const deleteQuestMenuItem = page.getByRole("menuitem", {
-    name: "Delete Quest",
-  });
+  const questCard = page.getByTestId(`quest-card-${normalizeTestId(questTitle)}`);
+  
+  const deleteQuestMenuItem = page.getByRole("menuitem", {name: "Delete Quest",});
 
   await questCard.click({ button: "right" });
   await page.waitForTimeout(200);
-  await deleteQuestMenuItem.click();  
+  await deleteQuestMenuItem.click();
   await page.getByRole("button", { name: "Confirm" }).click();
-
-
 }

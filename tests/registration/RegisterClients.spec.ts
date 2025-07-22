@@ -86,7 +86,7 @@ test("Client 2 - user logs in via Auth0 and is able to complete registration", a
   await page.waitForTimeout(1000);
 
   // +++++++++++ Register the user +++++++++++
-  await registerUser(page, "goku2", "bob2", "smith2", "Client");
+  await registerUser(page, "goku2", "bob", "smith", "Client");
 
   // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
 
@@ -130,7 +130,7 @@ test("Client 3 - user logs in via Auth0 and is able to complete registration", a
   await page.waitForTimeout(1000);
 
   // +++++++++++ Register the user +++++++++++
-  await registerUser(page, "goku3", "bob3", "smith3", "Client");
+  await registerUser(page, "goku3", "bob", "smith", "Client");
 
   // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
 
@@ -173,7 +173,7 @@ test("Client 4 - user logs in via Auth0 and is able to complete registration", a
   await page.waitForTimeout(1000);
 
   // +++++++++++ Register the user +++++++++++
-  await registerUser(page, "goku4", "bob4", "smith4", "Client");
+  await registerUser(page, "goku4", "bob", "smith", "Client");
 
   // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
 

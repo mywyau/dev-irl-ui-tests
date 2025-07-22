@@ -22,7 +22,6 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
     logoutLink,
     clientQuestDashboardLink,
     clientProfileLink,
-    createAQuestLink,
     viewAllQuestsLink,
     viewAllPublicQuestsLink,
   } = clientQuestElements(page);
@@ -105,7 +104,6 @@ test("Client user logs in with Google, is able to add rewards to these quests", 
   page,
 }) => {
   const {
-    addRewardButton,
     timeRewardInput,
     completionRewardInput,
     addCompletionRewardButton,
@@ -114,7 +112,6 @@ test("Client user logs in with Google, is able to add rewards to these quests", 
   const {
     loginLink,
     logoutLink,
-    viewMyQuestsLink,
     detailsLink,
     viewAllQuestsLink,
     clientProfileLink,
@@ -165,10 +162,8 @@ test("Client user logs in with Google, is able to add rewards to these quests", 
 
   await expect(h1).toHaveText("Quest Details");
 
-  const questCard = page
-    .getByText(testQuests.title3)
-    .locator("..")
-    .locator("..");
+  const questCard = page.getByTestId("quest-card-quest-3");
+
   await page.waitForTimeout(200);
 
   await questCard.click({ button: "right" });

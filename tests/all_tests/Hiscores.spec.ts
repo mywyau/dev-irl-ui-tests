@@ -4,7 +4,7 @@ import { clientQuestElements } from "@/selectors/ClientQuestSelectors";
 
 import { navBarSelectors } from "@/selectors/NavBarSelectors";
 
-test("Client user logs in with Google, is able to view Hiscores", async ({
+test("Hiscores is viewable publicly without Auth", async ({
   page,
 }) => {
   const { hiscoresLink } = navBarSelectors(page);

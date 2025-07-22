@@ -34,6 +34,8 @@ test("Client 1 - is able to create multiple quests", async ({ page }) => {
     viewAllPublicQuestsLink,
   } = clientQuestElements(page);
 
+  const numberOfQuestsToCreate = 3;
+  
   const h1 = page.locator("h1");
   const nagivateToHome = page.goto("/");
 
@@ -70,29 +72,39 @@ test("Client 1 - is able to create multiple quests", async ({ page }) => {
   await page.waitForTimeout(200);
   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
-  await createQuest(
-    page,
-    testQuests.title1,
-    testQuests.description1,
-    testQuests.criteria1,
-    testQuests.rank1
-  );
+  for (const quest of testQuests(numberOfQuestsToCreate)) {
+    await createQuest(
+      page,
+      quest.title,
+      quest.description,
+      quest.criteria,
+      quest.rank
+    );
+  }
 
-  await createQuest(
-    page,
-    testQuests.title2,
-    testQuests.description2,
-    testQuests.criteria2,
-    testQuests.rank2
-  );
+  // await createQuest(
+  //   page,
+  //   testQuests.title1,
+  //   testQuests.description1,
+  //   testQuests.criteria1,
+  //   testQuests.rank1
+  // );
 
-  await createQuest(
-    page,
-    testQuests.title3,
-    testQuests.description3,
-    testQuests.criteria3,
-    testQuests.rank3
-  );
+  // await createQuest(
+  //   page,
+  //   testQuests.title2,
+  //   testQuests.description2,
+  //   testQuests.criteria2,
+  //   testQuests.rank2
+  // );
+
+  // await createQuest(
+  //   page,
+  //   testQuests.title3,
+  //   testQuests.description3,
+  //   testQuests.criteria3,
+  //   testQuests.rank3
+  // );
 
   await page.waitForTimeout(200);
 

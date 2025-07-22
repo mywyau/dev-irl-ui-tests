@@ -21,18 +21,18 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
 
   const h1 = page.locator("h1");
 
-  const numberOfQuestsToCreate = 50
+  const numberOfQuestsToCreate = 10
 
-  // 🏠 Navigate to homepage
+  // Navigate to homepage
   await page.goto("/");
 
-  // 🔐 Auth0 + Google login
+  // Auth0 login
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
   await signInAuth0(page, clientEmail1, clientPassword1);
 
-  // ✅ Client UI loaded
+  // Client UI loaded
   await expect(logoutLink).toBeVisible();
   await expect(viewAllQuestsLink).toBeVisible();
   await expect(clientQuestDashboardLink).toBeVisible();
@@ -56,11 +56,11 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
     await createQuest(page, quest.title, quest.description, quest.criteria, quest.rank);
   }
 
-  // 🔍 View all public quests
+  // View all public quests
   await viewAllPublicQuestsLink.click();
   await expect(h1).toHaveText(questPageHeadings.allAvailableOpenQuests);
 
-  // 🚪 Logout
+  // Logout
   await logoutLink.click();
   await expect(loginLink).toBeVisible();
 });

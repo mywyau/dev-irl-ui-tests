@@ -21,6 +21,8 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
 
   const h1 = page.locator("h1");
 
+  const numberOfQuestsToCreate = 50
+
   // 🏠 Navigate to homepage
   await page.goto("/");
 
@@ -50,29 +52,9 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
 
   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
-  await createQuest(
-    page,
-    testQuests.title1,
-    testQuests.description1,
-    testQuests.criteria1,
-    testQuests.rank1
-  );
-
-  await createQuest(
-    page,
-    testQuests.title2,
-    testQuests.description2,
-    testQuests.criteria2,
-    testQuests.rank2
-  );
-
-  await createQuest(
-    page,
-    testQuests.title3,
-    testQuests.description3,
-    testQuests.criteria3,
-    testQuests.rank3
-  );
+  for (const quest of testQuests(numberOfQuestsToCreate)) {
+    await createQuest(page, quest.title, quest.description, quest.criteria, quest.rank);
+  }
 
   // 🔍 View all public quests
   await viewAllPublicQuestsLink.click();

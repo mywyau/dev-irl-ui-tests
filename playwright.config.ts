@@ -5,12 +5,25 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export default defineConfig({
-  use: {
-    baseURL: process.env.BASE_URL || "http://localhost:3000",
-    browserName: "chromium",
-    headless: false,
-  },
   testDir: "./tests",
   timeout: 30000,
   workers: 1,
+  use: {
+    browserName: "chromium",
+    headless: false,
+  },
+  projects: [
+    {
+      name: "local",
+      use: {
+        baseURL: "http://localhost:3000",
+      },
+    },
+    {
+      name: "prod",
+      use: {
+        baseURL: "https://app.devirl.com",
+      },
+    },
+  ],
 });

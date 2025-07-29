@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-npx playwright test tests/delete_users
+npx playwright test --project=local tests/delete_users 

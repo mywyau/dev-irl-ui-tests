@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-npx playwright test tests/upload_tests
+npx playwright test --project=local tests/upload_tests

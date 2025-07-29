@@ -6,15 +6,15 @@ please run
 
 #### 1.
 ```
-run_delete_users.sh
+delete_users.sh
 ```
 #### 2.
 ```
-run_registration.sh
+registration.sh
 ```
 
 #### 3.
-Then:
+Then Run main tests flows:
 
 ```
 all_tests.sh
@@ -25,4 +25,22 @@ all_tests.sh
 
 ```
 create_quests.sh
+```
+
+### Delete all test users
+
+```
+delete_users.sh
+```
+
+### Register all test users
+
+```
+registration.sh
+```
+
+### File Upload Test Flows
+
+```
+upload_tests.sh
 ```

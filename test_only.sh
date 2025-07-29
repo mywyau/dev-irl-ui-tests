@@ -12,7 +12,7 @@ if [ -z "$FILE" ]; then
   exit 1
 fi
 
-CMD="npx playwright test $FILE"
+CMD="npx playwright test --project=local $FILE"
 
 if [ ! -z "$NAME_FILTER" ]; then
   CMD="$CMD -g \"$NAME_FILTER\""

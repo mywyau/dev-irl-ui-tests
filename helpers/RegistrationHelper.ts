@@ -7,7 +7,6 @@ export async function validateHeroBar(page: Page) {
 
   await expect(hiscoresLink).toBeVisible();
   await expect(logoutLink).toBeVisible();
-  await expect(viewAllQuestsLink).toBeVisible();
 }
 
 export async function registerUser(

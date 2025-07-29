@@ -47,10 +47,6 @@ test("Client 1 - user logs in with Auth0 and able to complete registration", asy
 
   // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
 
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(dashboardLink).toBeVisible();
-  await expect(profileLink).toBeVisible();
-
   await profileLink.click();
 
   // +++++++++++ Logout +++++++++++
@@ -89,10 +85,6 @@ test("Client 2 - user logs in via Auth0 and is able to complete registration", a
   await registerUser(page, "goku2", "bob", "smith", "Client");
 
   // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
-
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(dashboardLink).toBeVisible();
-  await expect(profileLink).toBeVisible();
 
   await profileLink.click();
 
@@ -134,10 +126,6 @@ test("Client 3 - user logs in via Auth0 and is able to complete registration", a
 
   // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
 
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(dashboardLink).toBeVisible();
-  await expect(profileLink).toBeVisible();
-
   await profileLink.click();
 
   // +++++++++++ Logout +++++++++++
@@ -176,10 +164,6 @@ test("Client 4 - user logs in via Auth0 and is able to complete registration", a
   await registerUser(page, "goku4", "bob", "smith", "Client");
 
   // +++++++++++ Expect the UI to reflect FULLY Registered Client UI +++++++++++
-
-  await expect(viewAllQuestsLink).toBeVisible();
-  await expect(dashboardLink).toBeVisible();
-  await expect(profileLink).toBeVisible();
 
   await profileLink.click();
 

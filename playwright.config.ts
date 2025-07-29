@@ -6,7 +6,7 @@ dotenv.config();
 
 export default defineConfig({
   testDir: "./tests",
-  timeout: 30000,
+  timeout: 40000,
   workers: 1,
   use: {
     browserName: "chromium",

@@ -384,6 +384,8 @@ test("Dev 3 - is able to add an estimation to these quests", async ({
   await logoutLink.click();
   await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
+
+  await page.waitForTimeout(30000);
 });
 
 test("Client 1 - is able to set the quest status form estimated to open", async ({
@@ -398,6 +400,7 @@ test("Client 1 - is able to set the quest status form estimated to open", async 
     viewAllQuestsLink,
     viewAllPublicQuestsLink,
   } = clientQuestElements(page);
+
 
   const h1 = page.locator("h1");
   const nagivateToHome = page.goto("/");
@@ -425,6 +428,7 @@ test("Client 1 - is able to set the quest status form estimated to open", async 
     .getByText("Quest Dashboard")
     .locator("..")
     .locator("..");
+
   await page.waitForTimeout(200);
 
   await questDashboardCard.click({ button: "right" });

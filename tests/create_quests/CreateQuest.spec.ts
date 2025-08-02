@@ -21,7 +21,7 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
 
   const h1 = page.locator("h1");
 
-  const numberOfQuestsToCreate = 10
+  const numberOfQuestsToCreate = 20
 
   // Navigate to homepage
   await page.goto("/");

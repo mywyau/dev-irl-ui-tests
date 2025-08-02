@@ -30,4 +30,5 @@ export async function createQuest(
   await page.fill("#quest-description", description);
   await page.fill("#acceptance-criteria", criteria);
   await createQuestButton.click();
+  await page.waitForTimeout(1000);
 }

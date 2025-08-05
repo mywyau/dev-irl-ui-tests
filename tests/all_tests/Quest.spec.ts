@@ -385,7 +385,7 @@ test("Dev 3 - is able to add an estimation to these quests", async ({
   await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 
-  await page.waitForTimeout(30000);
+  await page.waitForTimeout(30000);  // this is for the estimation window to finish
 });
 
 test("Client 1 - is able to set the quest status form estimated to open", async ({

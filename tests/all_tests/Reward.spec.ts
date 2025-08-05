@@ -67,38 +67,8 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
   for (const quest of testQuests(numberOfQuestsToCreate)) {
-    await createQuest(
-      page,
-      quest.title,
-      quest.description,
-      quest.criteria,
-      quest.rank
-    );
+    await createQuest(page, quest.title, quest.description, quest.criteria);
   }
-
-  // await createQuest(
-  //   page,
-  //   testQuests.title1,
-  //   testQuests.description1,
-  //   testQuests.criteria1,
-  //   testQuests.rank1
-  // );
-
-  // await createQuest(
-  //   page,
-  //   testQuests.title2,
-  //   testQuests.description2,
-  //   testQuests.criteria2,
-  //   testQuests.rank2
-  // );
-
-  // await createQuest(
-  //   page,
-  //   testQuests.title3,
-  //   testQuests.description3,
-  //   testQuests.criteria3,
-  //   testQuests.rank3
-  // );
 
   await page.waitForTimeout(250);
 
@@ -112,10 +82,10 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   await expect(loginLink).toBeVisible();
 });
 
-test("Client user logs in with Google, is able to add rewards to these quests", async ({
+test("Client -  user logs in via Auth0, is able to add rewards to these quests", async ({
   page,
 }) => {
-  const { timeRewardInput, completionRewardInput, addCompletionRewardButton } =
+  const { timeRewardInput, addTimeRewardSubmitButton } =
     rewardElements(page);
 
   const {
@@ -155,8 +125,10 @@ test("Client user logs in with Google, is able to add rewards to these quests", 
     .getByText("Quest Dashboard")
     .locator("..")
     .locator("..");
-  await page.waitForTimeout(200);
 
+  const addTimeReward = page.getByRole("menuitem", { name: "Time Reward" });
+
+  await page.waitForTimeout(200);
   await questDashboardCard.click({ button: "right" });
   await page.waitForTimeout(200);
 
@@ -178,14 +150,11 @@ test("Client user logs in with Google, is able to add rewards to these quests", 
   await questCard.click({ button: "right" });
   await page.waitForTimeout(200);
 
-  const addAReward = page.getByRole("menuitem", { name: "Add a Reward" });
-  await addAReward.click();
+  await addTimeReward.click();
 
-  await expect(h1).toHaveText("Add Quest Reward");
+  await expect(h1).toHaveText("Time Reward");
   await timeRewardInput;
-  await completionRewardInput;
-  await addCompletionRewardButton.click();
-  await page.pause;
+  await addTimeRewardSubmitButton.click();
 
   // +++++++++++ Client Logs out +++++++++++
   await logoutLink.click();

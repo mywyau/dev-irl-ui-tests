@@ -21,6 +21,7 @@ import {
 import { createQuest } from "@/helpers/CreateQuestsHelper";
 import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
 import { deleteQuests } from "@/helpers/QuestHelper";
+import { navBarSelectors } from "@/selectors/NavBarSelectors";
 import { simpleSelectors } from "@/selectors/SimpleSelectors";
 
 test("Client 1 - is able to create multiple quests", async ({ page }) => {
@@ -35,7 +36,7 @@ test("Client 1 - is able to create multiple quests", async ({ page }) => {
   } = clientQuestElements(page);
 
   const numberOfQuestsToCreate = 3;
-  
+
   const h1 = page.locator("h1");
   const nagivateToHome = page.goto("/");
 
@@ -385,7 +386,7 @@ test("Dev 3 - is able to add an estimation to these quests", async ({
   await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 
-  await page.waitForTimeout(30000);  // this is for the estimation window to finish
+  await page.waitForTimeout(30000); // this is for the estimation window to finish
 });
 
 test("Client 1 - is able to set the quest status form estimated to open", async ({
@@ -400,7 +401,6 @@ test("Client 1 - is able to set the quest status form estimated to open", async 
     viewAllQuestsLink,
     viewAllPublicQuestsLink,
   } = clientQuestElements(page);
-
 
   const h1 = page.locator("h1");
   const nagivateToHome = page.goto("/");
@@ -565,7 +565,6 @@ test("Dev 1, is able to accept some quests and move it from NotStarted -> InProg
   await devQuestDashboardLink.click();
 
   await expect(h1).toHaveText("Quest Dashboard");
-
   await page.waitForTimeout(200);
 
   await questDashboardCard.click({ button: "right" });
@@ -699,4 +698,66 @@ test("Client 1 - deletes the quests they created", async ({ page }) => {
   await logoutLink.click();
   await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
+});
+
+
+// This test is dependant on xp being awarded
+test("Hiscores is viewable by Devs, with xp and levels being viewable for the respective skills and language", async ({
+  page,
+}) => {
+  const { hiscoresLink, numberOfDevsContent } = navBarSelectors(page);
+
+  const { loginLink, logoutLink } = devQuestElements(page);
+
+  const h1 = page.locator("h1");
+  const nagivateToHome = page.goto("/");
+
+  // +++++++++++ Test Start +++++++++++
+
+  await nagivateToHome;
+
+  // +++++++++++ Google Login as a Dev +++++++++++
+  await expect(loginLink).toBeVisible();
+  await loginLink.click();
+
+  await signInAuth0(page, clientEmail1, clientPassword1);
+  await expect(logoutLink).toBeVisible();
+
+  // +++++++++++ Hiscore Section +++++++++++
+
+  await expect(hiscoresLink).toBeVisible();
+  await hiscoresLink.click();
+
+  await expect(h1).toHaveText("Total Level");
+  await expect(numberOfDevsContent).toHaveText("There are 3 developers");
+
+  await page.locator("#questing-hiscore-side-bar-link").click();
+  await expect(h1).toHaveText("Questing");
+  await expect(numberOfDevsContent).toHaveText("There is 1 developer");
+
+  await page.locator("#estimating-hiscore-side-bar-link").click();
+  await expect(h1).toHaveText("Estimating");
+  await expect(numberOfDevsContent).toHaveText("There are 3 developers");
+
+
+  // test scroll bar
+
+  const lang = "python"; // target language (must match your `id` value)
+
+  const scrollArea = await page.locator(".reka-scroll-area-viewport").first(); // use appropriate selector
+  const link = page.locator(`#${lang}-hiscore-side-bar-link`);
+
+  // Scroll manually to the link
+  await link.scrollIntoViewIfNeeded();
+
+  // Ensure it's visible before clicking
+  await expect(link).toBeVisible();
+
+  // Click the link
+  await link.click();
+
+  // Optional: Assert the new page
+  await expect(page).toHaveURL(new RegExp(`/hiscores/languages/${lang}`));
+
+
 });

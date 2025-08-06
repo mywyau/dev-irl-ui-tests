@@ -9,4 +9,6 @@ export const navBarSelectors = (page: Page) => ({
   profileLink: page.getByRole("link", { name: "Profile" }),
   skillsLink: page.getByRole("link", { name: "Skills" }),
   viewAllQuestsLink: page.getByRole("link", { name: "View all quests" }),
+  numberOfDevsContent: page.locator("#total-level-number-of-devs")
+
 });

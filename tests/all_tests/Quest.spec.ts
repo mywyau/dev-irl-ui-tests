@@ -60,10 +60,9 @@ test("Client 1 - is able to create multiple quests", async ({ page }) => {
   await clientQuestDashboardLink.click();
 
   const card = page.getByText("Quest Dashboard").locator("..").locator("..");
-  await page.waitForTimeout(200);
 
+  await expect(card).toBeVisible();
   await card.click({ button: "right" });
-  await page.waitForTimeout(200);
 
   const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
   await createMenuItem.click();
@@ -429,35 +428,37 @@ test("Client 1 - is able to set the quest status form estimated to open", async 
     .locator("..")
     .locator("..");
 
-  await page.waitForTimeout(200);
-
+  await questDashboardCard.waitFor({ state: "visible" });
+  await questDashboardCard.hover();
   await questDashboardCard.click({ button: "right" });
-  await page.waitForTimeout(200);
 
   const viewMyQuestsMenuItem = page.getByRole("menuitem", {
     name: "View My Quests",
   });
 
+  await viewMyQuestsMenuItem.waitFor({ state: "visible" });
   await viewMyQuestsMenuItem.click();
-
-  await page.waitForTimeout(200);
-
+  await detailsLink.first().waitFor({ state: "visible" });
+  await detailsLink.first().hover();
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
 
   const questCard = page.getByTestId("quest-card-updated-quest-3");
-  await page.waitForTimeout(200);
 
+  await expect(questCard).toBeVisible();
+  await questCard.waitFor({ state: "visible" });
+  await questCard.hover();
   await questCard.click({ button: "right" });
-  await page.waitForTimeout(200);
 
   const setToOpenMenuItem = page.getByRole("menuitem", {
     name: "Set to Open",
   });
 
+  const confirmButton = page.getByRole("button", { name: "Confirm" });
+
   await setToOpenMenuItem.click();
-  await page.waitForTimeout(200);
-  await page.getByRole("button", { name: "Confirm" }).click();
+  await expect(confirmButton).toBeVisible();
+  await confirmButton.click();
 
   // // +++++++++++ Final Validation and Logout +++++++++++
 
@@ -465,7 +466,9 @@ test("Client 1 - is able to set the quest status form estimated to open", async 
   await expect(h1).toHaveText("All Available Quests");
 
   await logoutLink.click();
-  await page.waitForTimeout(200);
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
+
   await expect(loginLink).toBeVisible();
 });
 
@@ -512,30 +515,49 @@ test("Dev 1, is able to accept some quests and move it from NotStarted -> InProg
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
   await acceptQuestButton.click();
-  await page.waitForTimeout(200);
+
+  const confirmButton = page.getByRole("button", { name: "Confirm" });
+  await confirmButton.waitFor({ state: "visible" });
+  await confirmButton.hover();
   await page.getByRole("button", { name: "Confirm" }).click();
 
   await devQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
+
+  // const questDashboardCard = page
+  //   .getByText("Quest Dashboard")
+  //   .locator("..")
+  //   .locator("..");
+
+  // await page.waitForTimeout(200);
+
+  // await questDashboardCard.click({ button: "right" });
+  // await page.waitForTimeout(200);
 
   const questDashboardCard = page
     .getByText("Quest Dashboard")
     .locator("..")
     .locator("..");
 
-  await page.waitForTimeout(200);
-
+  await questDashboardCard.waitFor({ state: "visible" });
+  await questDashboardCard.hover();
   await questDashboardCard.click({ button: "right" });
-  await page.waitForTimeout(200);
 
   const notStartedMenuItem = page.getByRole("menuitem", {
     name: "Not Started",
   });
 
+  await notStartedMenuItem.waitFor({ state: "visible" });
+  await notStartedMenuItem.hover();
   await notStartedMenuItem.click();
+
   await expect(h1).toHaveText("Not Started");
-  await page.waitForTimeout(200);
-  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
+
+  const questTitle = page.locator("#quest-title");
+
+  await questTitle.waitFor({ state: "visible" });
+  // await page.waitForTimeout(200);
+  await expect(questTitle).toHaveText("Updated Quest 3");
 
   await moveToInProgressButton.click();
 
@@ -544,10 +566,11 @@ test("Dev 1, is able to accept some quests and move it from NotStarted -> InProg
   await devQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
 
-  await page.waitForTimeout(200);
-
+  await questDashboardCard.waitFor({ state: "visible" });
+  await questDashboardCard.hover();
+  // await page.waitForTimeout(200);
   await questDashboardCard.click({ button: "right" });
-  await page.waitForTimeout(200);
+  // await page.waitForTimeout(200);
 
   const inProgressMenuItem = page.getByRole("menuitem", {
     name: "In Progress",
@@ -556,8 +579,10 @@ test("Dev 1, is able to accept some quests and move it from NotStarted -> InProg
   await inProgressMenuItem.click();
 
   await expect(h1).toHaveText("In Progress");
-  await page.waitForTimeout(200);
-  await expect(page.locator("#quest-title")).toHaveText("Updated Quest 3");
+
+  await questTitle.waitFor({ state: "visible" });
+  // await page.waitForTimeout(200);
+  await expect(questTitle).toHaveText("Updated Quest 3");
 
   await moveToReviewButton.click();
   await page.getByRole("button", { name: "Confirm" }).click();
@@ -565,10 +590,12 @@ test("Dev 1, is able to accept some quests and move it from NotStarted -> InProg
   await devQuestDashboardLink.click();
 
   await expect(h1).toHaveText("Quest Dashboard");
-  await page.waitForTimeout(200);
 
+  await questDashboardCard.waitFor({ state: "visible" });
+  await questDashboardCard.hover();
+  // await page.waitForTimeout(200);
   await questDashboardCard.click({ button: "right" });
-  await page.waitForTimeout(200);
+  // await page.waitForTimeout(200);
 
   const reviewMenuItem = page.getByRole("menuitem", {
     name: "Review",
@@ -581,7 +608,9 @@ test("Dev 1, is able to accept some quests and move it from NotStarted -> InProg
 
   // +++++++++++ Dev is able to Log out +++++++++++
   await logoutLink.click();
-  await page.waitForTimeout(200);
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
+  // await page.waitForTimeout(200);
   await expect(loginLink).toBeVisible();
 });
 
@@ -700,7 +729,6 @@ test("Client 1 - deletes the quests they created", async ({ page }) => {
   await expect(loginLink).toBeVisible();
 });
 
-
 // This test is dependant on xp being awarded
 test("Hiscores is viewable by Devs, with xp and levels being viewable for the respective skills and language", async ({
   page,
@@ -739,7 +767,6 @@ test("Hiscores is viewable by Devs, with xp and levels being viewable for the re
   await expect(h1).toHaveText("Estimating");
   await expect(numberOfDevsContent).toHaveText("There are 3 developers");
 
-
   // test scroll bar
 
   const lang = "python"; // target language (must match your `id` value)
@@ -758,6 +785,4 @@ test("Hiscores is viewable by Devs, with xp and levels being viewable for the re
 
   // Optional: Assert the new page
   await expect(page).toHaveURL(new RegExp(`/hiscores/languages/${lang}`));
-
-
 });

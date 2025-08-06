@@ -14,7 +14,7 @@ import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
 import { deleteQuests } from "@/helpers/QuestHelper";
 import { rewardElements } from "@/selectors/RewardSelectors";
 
-test("Client 1 user logs in with Google, is able to create multiple quests", async ({
+test("Client 1 - user logs in with Auth0, is able to create multiple quests", async ({
   page,
 }) => {
   const {
@@ -82,7 +82,7 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   await expect(loginLink).toBeVisible();
 });
 
-test("Client -  user logs in via Auth0, is able to add both time reward and completion bonus to a quest", async ({
+test("Client 1 -  user logs in via Auth0, is able to add both time reward and completion bonus to a quest", async ({
   page,
 }) => {
   const { timeRewardInput, addTimeRewardSubmitButton, completionBonusInput, addCompleteBonusSubmitButton } = rewardElements(page);
@@ -174,7 +174,7 @@ test("Client -  user logs in via Auth0, is able to add both time reward and comp
   await expect(loginLink).toBeVisible();
 });
 
-test("Client deletes created quests", async ({ page }) => {
+test("Client 1 - deletes created quests", async ({ page }) => {
   const { loginLink, logoutLink, clientProfileLink, viewAllQuestsLink } =
     clientQuestElements(page);
 

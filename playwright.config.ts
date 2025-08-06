@@ -10,7 +10,7 @@ export default defineConfig({
   workers: 1,
   use: {
     browserName: "chromium",
-    headless: false,
+    headless: true,
   },
   projects: [
     {

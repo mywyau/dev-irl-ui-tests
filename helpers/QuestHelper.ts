@@ -9,8 +9,8 @@ function normalizeTestId(title: string): string {
 export async function deleteQuests(page: Page, questTitle: string) {
   const {
     clientQuestDashboardLink,
-    deleteQuestButton,
-    viewMyQuestsLink,
+    // deleteQuestButton,
+    // viewMyQuestsLink,
     detailsLink,
   } = clientQuestElements(page);
 
@@ -19,30 +19,46 @@ export async function deleteQuests(page: Page, questTitle: string) {
   await clientQuestDashboardLink.click();
   await expect(h1).toHaveText("Quest Dashboard");
 
-  const card = page.getByText("Quest Dashboard").locator("..").locator("..");
-  await page.waitForTimeout(200);
+  const questDashboardCard = page
+    .getByText("Quest Dashboard")
+    .locator("..")
+    .locator("..");
 
-  await card.click({ button: "right" });
-  await page.waitForTimeout(200);
+  await questDashboardCard.waitFor({ state: "visible" });
+  await questDashboardCard.hover();
+  await questDashboardCard.click({ button: "right" });
+
+  // await page.waitForTimeout(200);
+  // await card.click({ button: "right" });
+  // await page.waitForTimeout(200);
 
   const viewMyQuestsMenuItem = page.getByRole("menuitem", {
     name: "View My Quests",
   });
-
   await viewMyQuestsMenuItem.click();
 
   await expect(h1).toHaveText("My Quests");
   await detailsLink.first().click();
   await expect(h1).toHaveText("Quest Details");
   await expect(page.locator("#quest-title")).toHaveText(questTitle);
-  await page.waitForTimeout(200);
+  // await page.waitForTimeout(200);
 
-  const questCard = page.getByTestId(`quest-card-${normalizeTestId(questTitle)}`);
-  
-  const deleteQuestMenuItem = page.getByRole("menuitem", {name: "Delete Quest",});
+  const questCard = page.getByTestId(
+    `quest-card-${normalizeTestId(questTitle)}`
+  );
+  const deleteQuestMenuItem = page.getByRole("menuitem", {
+    name: "Delete Quest",
+  });
 
+  await questCard.waitFor({ state: "visible" });
+  await questCard.hover();
   await questCard.click({ button: "right" });
-  await page.waitForTimeout(200);
+
+  // await page.waitForTimeout(200);
+
+  // await deleteQuestMenuItem.waitFor({ state: "visible" });
+  await deleteQuestMenuItem.hover();
   await deleteQuestMenuItem.click();
+
   await page.getByRole("button", { name: "Confirm" }).click();
 }

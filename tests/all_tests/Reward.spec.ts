@@ -82,11 +82,10 @@ test("Client 1 user logs in with Google, is able to create multiple quests", asy
   await expect(loginLink).toBeVisible();
 });
 
-test("Client -  user logs in via Auth0, is able to add rewards to these quests", async ({
+test("Client -  user logs in via Auth0, is able to add both time reward and completion bonus to a quest", async ({
   page,
 }) => {
-  const { timeRewardInput, addTimeRewardSubmitButton } =
-    rewardElements(page);
+  const { timeRewardInput, addTimeRewardSubmitButton, completionBonusInput, addCompleteBonusSubmitButton } = rewardElements(page);
 
   const {
     loginLink,
@@ -126,7 +125,11 @@ test("Client -  user logs in via Auth0, is able to add rewards to these quests",
     .locator("..")
     .locator("..");
 
+  const questCard = page.getByTestId("quest-card-quest-3");
   const addTimeReward = page.getByRole("menuitem", { name: "Time Reward" });
+  const addCompleteBonus = page.getByRole("menuitem", {
+    name: "Completion Bonus",
+  });
 
   await page.waitForTimeout(200);
   await questDashboardCard.click({ button: "right" });
@@ -143,8 +146,6 @@ test("Client -  user logs in via Auth0, is able to add rewards to these quests",
 
   await expect(h1).toHaveText("Quest Details");
 
-  const questCard = page.getByTestId("quest-card-quest-3");
-
   await page.waitForTimeout(200);
 
   await questCard.click({ button: "right" });
@@ -155,6 +156,17 @@ test("Client -  user logs in via Auth0, is able to add rewards to these quests",
   await expect(h1).toHaveText("Time Reward");
   await timeRewardInput;
   await addTimeRewardSubmitButton.click();
+
+  await page.goBack();
+
+  await expect(h1).toHaveText("Quest Details");
+  await questCard.click({ button: "right" });
+  await page.waitForTimeout(200);
+  await addCompleteBonus.click();
+
+  await expect(h1).toHaveText("Completion Bonus");
+  await completionBonusInput;
+  await addCompleteBonusSubmitButton.click();
 
   // +++++++++++ Client Logs out +++++++++++
   await logoutLink.click();

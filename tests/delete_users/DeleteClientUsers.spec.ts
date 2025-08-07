@@ -31,7 +31,7 @@ test("Client 1 - Login and delete the test client user profile", async ({
 
   await nagivateToHome;
 
-  // +++++++++++ Google Login +++++++++++
+  // +++++++++++ Auth0 Login +++++++++++
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
@@ -57,7 +57,7 @@ test("Client 2 - Login and delete the test client user profile", async ({
 
   await nagivateToHome;
 
-  // +++++++++++ Google Login +++++++++++
+  // +++++++++++ Auth0 Login +++++++++++
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
@@ -83,7 +83,7 @@ test("Client 3 - Login and delete the test client user profile", async ({
 
   await nagivateToHome;
 
-  // +++++++++++ Google Login +++++++++++
+  // +++++++++++ Auth0 Login +++++++++++
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 
@@ -109,7 +109,7 @@ test("Client 4 - Login and delete the test client user profile", async ({
 
   await nagivateToHome;
 
-  // +++++++++++ Google Login +++++++++++
+  // +++++++++++ Auth0 Login +++++++++++
   await expect(loginLink).toBeVisible();
   await loginLink.click();
 

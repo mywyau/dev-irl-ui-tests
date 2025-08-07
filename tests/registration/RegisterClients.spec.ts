@@ -12,7 +12,7 @@ import {
 } from "@/configuration/Appconfig";
 
 import { signInAuth0 } from "@/helpers/NonSocialAuth0Helper";
-import { registerUser, validateHeroBar } from "@/helpers/RegistrationHelper"
+import { registerUser, validateHeroBar } from "@/helpers/RegistrationHelper";
 import { navBarSelectors } from "@/selectors/NavBarSelectors";
 
 test("Client 1 - user logs in with Auth0 and able to complete registration", async ({
@@ -49,8 +49,12 @@ test("Client 1 - user logs in with Auth0 and able to complete registration", asy
 
   await profileLink.click();
 
-  // +++++++++++ Logout +++++++++++
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });
 
@@ -88,11 +92,14 @@ test("Client 2 - user logs in via Auth0 and is able to complete registration", a
 
   await profileLink.click();
 
-  // +++++++++++ Logout +++++++++++
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });
-
 
 test("Client 3 - user logs in via Auth0 and is able to complete registration", async ({
   page,
@@ -128,8 +135,12 @@ test("Client 3 - user logs in via Auth0 and is able to complete registration", a
 
   await profileLink.click();
 
-  // +++++++++++ Logout +++++++++++
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });
 
@@ -167,7 +178,11 @@ test("Client 4 - user logs in via Auth0 and is able to complete registration", a
 
   await profileLink.click();
 
-  // +++++++++++ Logout +++++++++++
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });

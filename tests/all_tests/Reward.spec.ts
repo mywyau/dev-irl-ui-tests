@@ -53,39 +53,51 @@ test("Client 1 - user logs in with Auth0, is able to create multiple quests", as
     .getByText("Quest Dashboard")
     .locator("..")
     .locator("..");
-  await page.waitForTimeout(200);
 
+  await questDashboardCard.waitFor({ state: "visible" });
+  await questDashboardCard.hover();
   await questDashboardCard.click({ button: "right" });
-  await page.waitForTimeout(200);
 
   const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
+
+  await createMenuItem.waitFor({ state: "visible" });
+  await createMenuItem.hover();
   await createMenuItem.click();
 
   // +++++++++++ Quest creation +++++++++++
 
-  await page.waitForTimeout(250);
+  await h1.waitFor({ state: "visible" });
   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
   for (const quest of testQuests(numberOfQuestsToCreate)) {
     await createQuest(page, quest.title, quest.description, quest.criteria);
   }
 
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(200);
 
   // // +++++++++++ Final Validation and Logout +++++++++++
 
   await viewAllPublicQuestsLink.click();
   await expect(h1).toHaveText("All Available Quests");
 
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
-  await page.waitForTimeout(500);
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });
 
 test("Client 1 -  user logs in via Auth0, is able to add both time reward and completion bonus to a quest", async ({
   page,
 }) => {
-  const { timeRewardInput, addTimeRewardSubmitButton, completionBonusInput, addCompleteBonusSubmitButton } = rewardElements(page);
+  const {
+    timeRewardInput,
+    addTimeRewardSubmitButton,
+    completionBonusInput,
+    addCompleteBonusSubmitButton,
+  } = rewardElements(page);
 
   const {
     loginLink,
@@ -131,9 +143,9 @@ test("Client 1 -  user logs in via Auth0, is able to add both time reward and co
     name: "Completion Bonus",
   });
 
-  await page.waitForTimeout(200);
+  await questDashboardCard.waitFor({ state: "visible" });
+  await questDashboardCard.hover();
   await questDashboardCard.click({ button: "right" });
-  await page.waitForTimeout(200);
 
   const viewMyQuestsMenuItem = page.getByRole("menuitem", {
     name: "View My Quests",
@@ -146,11 +158,15 @@ test("Client 1 -  user logs in via Auth0, is able to add both time reward and co
 
   await expect(h1).toHaveText("Quest Details");
 
-  await page.waitForTimeout(200);
+  // await page.waitForTimeout(200);
 
+  await questCard.waitFor({ state: "visible" });
+  await questCard.hover();
   await questCard.click({ button: "right" });
-  await page.waitForTimeout(200);
+  // await page.waitForTimeout(200);
 
+  await addTimeReward.waitFor({ state: "visible" });
+  await addTimeReward.hover();
   await addTimeReward.click();
 
   await expect(h1).toHaveText("Time Reward");
@@ -160,8 +176,13 @@ test("Client 1 -  user logs in via Auth0, is able to add both time reward and co
   await page.goBack();
 
   await expect(h1).toHaveText("Quest Details");
+
+  await questCard.waitFor({ state: "visible" });
+  await questCard.hover();
   await questCard.click({ button: "right" });
-  await page.waitForTimeout(200);
+
+  await addCompleteBonus.waitFor({ state: "visible" });
+  await addCompleteBonus.hover();
   await addCompleteBonus.click();
 
   await expect(h1).toHaveText("Completion Bonus");
@@ -169,8 +190,11 @@ test("Client 1 -  user logs in via Auth0, is able to add both time reward and co
   await addCompleteBonusSubmitButton.click();
 
   // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
-  await page.waitForTimeout(500);
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });
 
@@ -204,8 +228,10 @@ test("Client 1 - deletes created quests", async ({ page }) => {
   await deleteQuests(page, "Quest 1");
 
   // +++++++++++ Client Logs out +++++++++++
-
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
-  await page.waitForTimeout(500);
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });

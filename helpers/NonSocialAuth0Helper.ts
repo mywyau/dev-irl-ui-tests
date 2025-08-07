@@ -23,12 +23,13 @@ export async function deleteUserViaProfilePage(page: Page) {
 }
 
 export async function heroBarIsVisable(page: Page) {
-  const {
-    dashboardLink,
-    logoutLink,
-    profileLink,
-    viewAllQuestsLink,
-  } = navBarSelectors(page);
+  const { dashboardLink, logoutLink, profileLink, viewAllQuestsLink } =
+    navBarSelectors(page);
+
+  await logoutLink.waitFor({ state: "visible" });
+  await viewAllQuestsLink.waitFor({ state: "visible" });
+  await dashboardLink.waitFor({ state: "visible" });
+  await profileLink.waitFor({ state: "visible" });
 
   await expect(logoutLink).toBeVisible();
   await expect(viewAllQuestsLink).toBeVisible();

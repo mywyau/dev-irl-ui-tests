@@ -24,11 +24,14 @@ export async function registerUser(
   await page.locator("#firstname").fill(firstname);
   await page.locator("#lastname").fill(lastname);
 
-  // 2) Open the dropdown: 
+  // 2) Open the dropdown:
   // const trigger = page.locator('[data-testid="role-select-trigger"]');
-  const trigger = page.locator('#role-select');
-  await expect(trigger).toBeVisible();
-  await page.waitForTimeout(250);
+  const trigger = page.locator("#role-select");
+
+  // await expect(trigger).toBeVisible();
+  await trigger.waitFor({ state: "visible" });
+  await trigger.hover();
+  // await page.waitForTimeout(250);
   await trigger.click();
 
   // 3) Select the correct option (e.g. Dev or Client)

@@ -705,9 +705,6 @@ test("Client 1 - is able to move a quest in Review to Completed", async ({
   await questDashboardCard.hover();
   await questDashboardCard.click({ button: "right" });
 
-  // await questDashboardCard.click({ button: "right" });
-  // await page.waitForTimeout(200);
-
   const completedMenuItem = page.getByRole("menuitem", {
     name: "Completed",
   });

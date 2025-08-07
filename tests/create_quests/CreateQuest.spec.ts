@@ -21,7 +21,7 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
 
   const h1 = page.locator("h1");
 
-  const numberOfQuestsToCreate = 20
+  const numberOfQuestsToCreate = 20;
 
   // Navigate to homepage
   await page.goto("/");
@@ -41,11 +41,18 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
   // Navigate to Create quests via context menu dropdown
   await clientQuestDashboardLink.click();
 
-  const card = page.getByText("Quest Dashboard").locator("..").locator("..");
-  await page.waitForTimeout(250);
+  const questDashboardCard = page
+    .getByText("Quest Dashboard")
+    .locator("..")
+    .locator("..");
 
-  await card.click({ button: "right" });
-  await page.waitForTimeout(250);
+  await questDashboardCard.waitFor({ state: "visible" });
+  await questDashboardCard.hover();
+  await questDashboardCard.click({ button: "right" });
+
+  // await page.waitForTimeout(250);
+  // await card.click({ button: "right" });
+  // await page.waitForTimeout(250);
 
   const createMenuItem = page.getByRole("menuitem", { name: "Create a Quest" });
   await createMenuItem.click();
@@ -53,14 +60,18 @@ test("Client user logs in and creates multiple quests", async ({ page }) => {
   await expect(h1).toHaveText(questPageHeadings.createANewQuest);
 
   for (const quest of testQuests(numberOfQuestsToCreate)) {
-    await createQuest(page, quest.title, quest.description, quest.criteria, quest.rank);
+    await createQuest(page, quest.title, quest.description, quest.criteria);
   }
 
   // View all public quests
   await viewAllPublicQuestsLink.click();
   await expect(h1).toHaveText(questPageHeadings.allAvailableOpenQuests);
 
-  // Logout
+  // +++++++++++ Client Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });

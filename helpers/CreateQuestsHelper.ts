@@ -12,9 +12,13 @@ export async function createQuest(
 
   const rankButtonTrigger = page.locator("#rank");
 
-  await page.waitForTimeout(1000);
-  await expect(rankButtonTrigger).toBeVisible();
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(500);
+
+  // await expect(rankButtonTrigger).toBeVisible();
+
+  await rankButtonTrigger.waitFor({ state: "visible" });
+  await rankButtonTrigger.hover();
+  // await page.waitForTimeout(250);
   await rankButtonTrigger.click();
   await page.click("#rank-option-Mithril"); // Select "Mithril"
 

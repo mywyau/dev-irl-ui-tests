@@ -88,8 +88,12 @@ test("Dev 2 - user logs in via Auth0 and is able to complete registration", asyn
 
   await profileLink.click();
 
-  // +++++++++++ Logout +++++++++++
+  // +++++++++++ Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });
 
@@ -127,8 +131,12 @@ test("Dev 3 - user logs in via Auth0 and is able to complete registration", asyn
 
   await profileLink.click();
 
-  // +++++++++++ Logout +++++++++++
+  // +++++++++++ Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });
 
@@ -166,7 +174,11 @@ test("Dev 4 - user logs in via Auth0 and is able to complete registration", asyn
 
   await profileLink.click();
 
-  // +++++++++++ Logout +++++++++++
+  // +++++++++++ Logs out +++++++++++
+  await logoutLink.waitFor({ state: "visible" });
+  await logoutLink.hover();
   await logoutLink.click();
+
+  await loginLink.waitFor({ state: "visible" });
   await expect(loginLink).toBeVisible();
 });
